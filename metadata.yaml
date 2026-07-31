@@ -1,0 +1,48 @@
+---
+# Editorial metadata for the book's front/back matter (Amazon KDP, print).
+# Feeds the title page, colophon, and dedication in template.tex.
+# PLACEHOLDER: refine title, subtitle, dedication, and isbn before publication.
+
+lang: "en"
+
+title: "Laravel 13: The Unwritten API"
+subtitle: "A Guide to Usable but Undocumented Concepts"
+author:
+  - "Roberto Gallea"
+year: "2026"
+
+# Publisher: with a free KDP ISBN this reads "Independently published".
+publisher: "Independently published"
+
+# ISBN: the free KDP ISBN is assigned at publication and only appears on the
+# back-cover barcode. Leave empty to omit it from the interior.
+isbn: ""
+
+# Laravel version this edition was verified against (see CHANGELOG.md for what
+# changed since the previous verified version). Printed in the colophon.
+laravelversion: "v13.22.0"
+
+# English edition: the LaTeX template defaults to "Capitolo"/"Prima edizione"
+# when these are absent, so they must be set explicitly here.
+chapterlabel: "Chapter"
+editionline: "First edition, 2026."
+
+dedica: |
+  To everyone who read the framework's source before asking why.
+
+rights: |
+  This book's text is licensed under Creative Commons Attribution-ShareAlike 4.0
+  International (CC BY-SA 4.0). All code examples, including snippets embedded in
+  the text, are licensed under the MIT License. See LICENSE and LICENSE-CODE, or
+  https://github.com/robertogallea/undocumented-laravel-book for the always-current
+  source.
+
+# PLACEHOLDER: list any additional third-party trademarks mentioned in the book,
+# following the model "<Product> is a trademark of <holder>."
+trademark: "Laravel is a trademark of Taylor Otwell. PHP and the other product and service names mentioned are trademarks of their respective owners and are used for identification and explanatory purposes only, without any intent to infringe."
+
+techdisclaimer: "The information in this book is provided \"as is\". It is verified against Laravel v13.22.0 (see laravelversion above); see CHANGELOG.md for what changed since. The author assumes no liability for damages arising from the use of the contents or code presented herein."
+
+# Title of the legal-notices section in the EPUB edition (epub-template.xhtml).
+legalheading: "Legal notices"
+---

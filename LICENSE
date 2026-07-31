@@ -1,0 +1,23 @@
+Copyright (c) 2026 Roberto Gallea
+
+The text of this book (everything under `chapters/` and `docs/`, including this file's
+own repository) is licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License (CC BY-SA 4.0).
+
+To view a copy of this license, visit:
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+You are free to:
+- Share: copy and redistribute the material in any medium or format.
+- Adapt: remix, transform, and build upon the material for any purpose, even commercially.
+
+Under the following terms:
+- Attribution: you must give appropriate credit, provide a link to the license, and
+  indicate if changes were made.
+- ShareAlike: if you remix, transform, or build upon the material, you must distribute
+  your contributions under the same license as the original.
+
+This license applies to the book's PROSE only. All code examples, including snippets
+embedded inline in the text, are licensed separately under the MIT License instead
+(see LICENSE-CODE at the repository root, and code/LICENSE inside the companion
+application). CC BY-SA does not apply to any code in this project.

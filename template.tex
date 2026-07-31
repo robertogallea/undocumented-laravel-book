@@ -1,0 +1,434 @@
+\documentclass[
+$if(fontsize)$
+  $fontsize$,
+$else$
+  11pt,
+$endif$
+  twoside
+]{article}
+
+% -------------------------------------------------
+% Font e lingua
+% -------------------------------------------------
+\usepackage{fontspec}
+\usepackage{polyglossia}
+
+$if(lang)$
+\setmainlanguage{$lang$}
+$else$
+\setmainlanguage{italian}
+$endif$
+
+\setmainfont{DejaVu Sans}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+
+% -------------------------------------------------
+% Layout pagina
+% -------------------------------------------------
+% Formato 7.5x9.25" (trim tecnico KDP) con margine interno (gutter) maggiore per
+% la rilegatura e preliminari fronte-retro.
+% includehead: il margine "top" comprende l'intestazione, cosi' il suo bordo
+% superiore cade esattamente a "top" dal taglio (prima sconfinava sopra il margine,
+% a ~0.23" dal bordo, sotto il minimo KDP di 0.25"). headsep tiene il corpo del
+% testo dove era prima, cosi' impaginazione e numero di pagine non cambiano.
+\usepackage[
+  paperwidth=7.5in,
+  paperheight=9.25in,
+  inner=1.9cm,
+  outer=1.6cm,
+  top=1.05cm,
+  bottom=2.2cm,
+  headheight=16pt,
+  headsep=11pt,
+  includehead
+]{geometry}
+
+% Le pagine bianche inserite da \cleardoublepage devono essere prive di
+% header/footer (convenzione tipografica dei preliminari).
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside
+  \ifodd\c@page\else
+    \hbox{}\thispagestyle{empty}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi
+\fi}
+\makeatother
+
+\usepackage{setspace}
+\setstretch{1.35}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.65em}
+\setlength{\emergencystretch}{3em}
+
+% -------------------------------------------------
+% Colori
+% -------------------------------------------------
+\usepackage{xcolor}
+
+\definecolor{Accent}{HTML}{2563EB}
+\definecolor{Dark}{HTML}{111827}
+\definecolor{Muted}{HTML}{6B7280}
+\definecolor{LightBg}{HTML}{F3F4F6}
+\definecolor{RuleColor}{HTML}{D1D5DB}
+
+% -------------------------------------------------
+% Link
+% -------------------------------------------------
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=Accent,
+  urlcolor=Accent,
+  citecolor=Accent,
+  pdfborder={0 0 0}
+}
+
+% -------------------------------------------------
+% Titoli
+% -------------------------------------------------
+\usepackage{titlesec}
+
+% Numeriamo solo i capitoli (livello section): l'etichetta "Capitolo N" e' generata
+% da LaTeX (vedi \titleformat piu' sotto). Le sottosezioni restano senza numero.
+% Introduzione, Conclusione e Appendice sono heading non numerati (\section*).
+\setcounter{secnumdepth}{1}
+
+% Apertura capitolo: etichetta "CAPITOLO N" in accento su riga a se', titolo sotto.
+% I capitoli non numerati (\section*: Introduzione/Conclusione/Appendice) mostrano
+% solo il titolo, senza etichetta.
+\titleformat{\section}
+  [display]
+  {\sffamily\color{Dark}\raggedright}
+  {\large\bfseries\color{Accent}\MakeUppercase{$if(chapterlabel)$$chapterlabel$$else$Capitolo$endif$ \thesection}}
+  {0.2em}
+  {\LARGE\bfseries}
+
+\titleformat{\subsection}
+  {\large\bfseries\sffamily\color{Dark}}
+  {\thesubsection}
+  {0.8em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\sffamily\color{Dark}}
+  {\thesubsubsection}
+  {0.8em}
+  {}
+
+\titleformat{\paragraph}
+  {\normalsize\bfseries\sffamily\color{Dark}}
+  {}
+  {0pt}
+  {}
+
+% Ogni capitolo (incluse Introduzione/Conclusione/Appendice) inizia su nuova pagina.
+\newcommand{\sectionbreak}{\clearpage}
+
+\titlespacing*{\section}{0pt}{2.4em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.8em}{0.6em}
+\titlespacing*{\subsubsection}{0pt}{1.2em}{0.4em}
+\titlespacing*{\paragraph}{0pt}{1em}{0.4em}
+
+% -------------------------------------------------
+% Header e footer
+% -------------------------------------------------
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+$if(title)$
+\fancyhead[L]{\small\sffamily\color{Muted}$title$}
+$else$
+\fancyhead[L]{\small\sffamily\color{Muted}Manuale}
+$endif$
+
+\fancyhead[R]{\small\sffamily\color{Muted}\leftmark}
+\fancyfoot[C]{\small\sffamily\color{Muted}\thepage}
+
+% Running head corto: "Capitolo N" per i capitoli numerati (evita lo sforamento
+% dei titoli lunghi). Introduzione/Conclusione/Appendice impostano il proprio
+% \markboth direttamente nel testo (blocco raw dopo il rispettivo titolo).
+\renewcommand{\sectionmark}[1]{\markboth{$if(chapterlabel)$$chapterlabel$$else$Capitolo$endif$ \thesection}{}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{
+  \hbox to\headwidth{\color{RuleColor}\leaders\hrule height \headrulewidth\hfill}
+}
+
+\renewcommand{\footrulewidth}{0pt}
+
+% -------------------------------------------------
+% Tabelle
+% -------------------------------------------------
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{calc}
+
+% -------------------------------------------------
+% Immagini
+% -------------------------------------------------
+\usepackage{graphicx}
+\usepackage{float}
+
+\makeatletter
+\def\maxwidth{
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\setkeys{Gin}{width=\maxwidth,height=0.5\textheight,keepaspectratio}
+
+% Ogni immagine (i diagrammi mermaid dei capitoli, unica fonte di immagini nel
+% libro) viene centrata orizzontalmente: senza questo, un'immagine autonoma in
+% un paragrafo (nessuna didascalia, quindi nessun ambiente "figure" impostato
+% automaticamente da Pandoc) resta allineata a sinistra.
+\let\oldincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \begin{center}
+    \oldincludegraphics[#1]{#2}%
+  \end{center}%
+}
+
+% -------------------------------------------------
+% Liste
+% -------------------------------------------------
+\usepackage{enumitem}
+
+\setlist[itemize]{
+  topsep=0.35em,
+  itemsep=0.2em,
+  parsep=0pt
+}
+
+\setlist[enumerate]{
+  topsep=0.35em,
+  itemsep=0.2em,
+  parsep=0pt
+}
+
+\providecommand{\tightlist}{
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+}
+
+% -------------------------------------------------
+% Citazioni / blocchi quote
+% -------------------------------------------------
+\usepackage{framed}
+
+\renewenvironment{quote}
+  {\begin{leftbar}\small\color{Dark}}
+  {\end{leftbar}}
+
+% -------------------------------------------------
+% Codice generato da Pandoc
+%
+% Importante:
+% NON definire manualmente Shaded, Highlighting,
+% KeywordTok, AlertTok, StringTok, ecc.
+% Pandoc li inserisce qui.
+% -------------------------------------------------
+\usepackage{fvextra}
+
+$if(highlighting-macros)$
+$highlighting-macros$
+
+\RecustomVerbatimEnvironment{Highlighting}{Verbatim}{
+  commandchars=\\\{\},
+  breaklines=true,
+  breakanywhere=true,
+  fontsize=\footnotesize
+}
+$endif$
+
+% Blocchi di codice SENZA linguaggio (fence ``` semplice): Pandoc li emette come
+% ambiente `verbatim` standard, che NON manda a capo le righe lunghe e sfora il
+% margine destro (es. output di --profile in cap. 8 e report di mutation in cap. 11).
+% Lo ridefiniamo su fvextra con le stesse impostazioni di Highlighting.
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{
+  breaklines=true,
+  breakanywhere=true,
+  fontsize=\footnotesize
+}
+
+% Codice inline (\texttt di Pandoc): consenti l'andata a capo per non far sforare
+% nel margine token lunghi come "Task::factory()->create()". Meccanismo nativo
+% XeTeX (veloce): dopo gli operatori si inserisce un punto di interruzione
+% (\allowbreak, senza trattino), attivo SOLO dentro \texttt. I blocchi di codice
+% sopra usano fvextra e non sono toccati.
+\NewCommandCopy\origtexttt\texttt
+\XeTeXcharclass`\.=6 \XeTeXcharclass`\:=6 \XeTeXcharclass`\(=6 \XeTeXcharclass`\)=6
+\XeTeXcharclass`\>=6 \XeTeXcharclass`\<=6 \XeTeXcharclass`\/=6 \XeTeXcharclass`\-=6
+\XeTeXcharclass`\_=6 \XeTeXcharclass`\;=6 \XeTeXcharclass`\,=6 \XeTeXcharclass`\|=6
+\XeTeXinterchartoks 6 0={\allowbreak}
+\XeTeXinterchartoks 6 6={\allowbreak}
+% Robusta: non espansa nell'indice o nei mark di pagina, solo in composizione.
+\DeclareRobustCommand{\texttt}[1]{{\XeTeXinterchartokenstate=1\relax\origtexttt{#1}}}
+% Nei segnalibri PDF usa il testo semplice (evita comandi non gestiti da hyperref).
+\makeatletter
+\pdfstringdefDisableCommands{\def\texttt#1{#1}\def\origtexttt#1{#1}}
+\makeatother
+
+% -------------------------------------------------
+% Titolo
+% -------------------------------------------------
+\usepackage{titling}
+
+\pretitle{
+  \begin{center}
+  \vspace*{2cm}
+  \Huge\sffamily\bfseries\color{Dark}
+}
+
+\posttitle{
+  \par
+  \vspace{0.4cm}
+  \end{center}
+}
+
+\preauthor{
+  \begin{center}
+  \large\sffamily\color{Muted}
+}
+
+\postauthor{
+  \par
+  \end{center}
+}
+
+\predate{
+  \begin{center}
+  \small\sffamily\color{Muted}
+}
+
+\postdate{
+  \par
+  \vspace{2cm}
+  \end{center}
+}
+
+% -------------------------------------------------
+% Metadati PDF
+% -------------------------------------------------
+$if(title)$
+\title{$title$}
+$endif$
+
+$if(author)$
+\author{$for(author)$$author$$sep$ \and $endfor$}
+$else$
+\author{}
+$endif$
+
+$if(date)$
+\date{$date$}
+$else$
+\date{}
+$endif$
+
+% -------------------------------------------------
+% Documento
+% -------------------------------------------------
+\begin{document}
+
+% =================================================================
+% Preliminari (numerazione romana, senza header/footer)
+% =================================================================
+\pagenumbering{roman}
+\hypersetup{linkcolor=Dark}
+
+% ---- Occhiello (half-title) ----
+$if(title)$
+\thispagestyle{empty}
+\begin{center}
+\vspace*{6cm}
+{\LARGE\sffamily\bfseries\color{Dark}$title$\par}
+\end{center}
+\cleardoublepage
+$endif$
+
+% ---- Frontespizio (title page) ----
+\thispagestyle{empty}
+\begin{center}
+\vspace*{4cm}
+{\Huge\sffamily\bfseries\color{Dark}$title$\par}
+$if(subtitle)$
+\vspace{0.8cm}
+{\large\sffamily\color{Muted}$subtitle$\par}
+$endif$
+\vspace{2.5cm}
+$for(author)$
+{\Large\sffamily\color{Dark}$author$\par}
+$endfor$
+\vfill
+$if(publisher)$
+{\normalsize\sffamily\color{Muted}$publisher$\par}
+$endif$
+\vspace{1cm}
+\end{center}
+\clearpage
+
+% ---- Colophon (verso del frontespizio) ----
+\thispagestyle{empty}
+\null\vfill
+{\footnotesize\sffamily\color{Muted}
+$if(title)$\textbf{$title$}\par$endif$
+$if(subtitle)$$subtitle$\par$endif$
+\vspace{0.6em}
+
+\textcopyright{}~$year$ $for(author)$$author$$sep$, $endfor$\par
+$if(publisher)$$publisher$\par$endif$
+$if(isbn)$ISBN: $isbn$\par$endif$
+$if(laravelversion)$Verified against Laravel $laravelversion$\par$endif$
+\vspace{0.6em}
+
+$if(rights)$$rights$\par$endif$
+\vspace{0.4em}
+
+$if(trademark)$$trademark$\par$endif$
+\vspace{0.4em}
+
+$if(techdisclaimer)$$techdisclaimer$\par$endif$
+\vspace{0.6em}
+
+$if(editionline)$$editionline$$else$Prima edizione, $year$.$endif$\par
+}
+\cleardoublepage
+
+% ---- Dedica ----
+$if(dedica)$
+\thispagestyle{empty}
+\begin{flushright}
+\vspace*{5cm}
+{\large\itshape\color{Dark}$dedica$\par}
+\end{flushright}
+\cleardoublepage
+$endif$
+
+% ---- Indice ----
+$if(toc)$
+{
+\hypersetup{linkcolor=Dark}
+\tableofcontents
+}
+\cleardoublepage
+$endif$
+
+% =================================================================
+% Corpo (numerazione araba)
+% =================================================================
+\pagenumbering{arabic}
+
+$body$
+
+\end{document}

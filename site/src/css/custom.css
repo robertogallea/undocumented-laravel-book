@@ -1,0 +1,24 @@
+/**
+ * Placeholder theme overrides. Docusaurus's default classic theme is used as-is
+ * otherwise; adjust colors/spacing here once the site has real content to design around.
+ */
+
+:root {
+  --ifm-color-primary: #ff2d20;
+  --ifm-color-primary-dark: #e6291d;
+  --ifm-color-primary-darker: #d9271b;
+  --ifm-color-primary-darkest: #b32016;
+  --ifm-color-primary-light: #ff4536;
+  --ifm-color-primary-lighter: #ff5142;
+  --ifm-color-primary-lightest: #ff7166;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #ff6b5e;
+  --ifm-color-primary-dark: #ff4f3f;
+  --ifm-color-primary-darker: #ff4030;
+  --ifm-color-primary-darkest: #f11f0d;
+  --ifm-color-primary-light: #ff877d;
+  --ifm-color-primary-lighter: #ff968d;
+  --ifm-color-primary-lightest: #ffc1bb;
+}

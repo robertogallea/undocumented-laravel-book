@@ -1,0 +1,8 @@
+{
+  "name": "book-scaffold",
+  "private": true,
+  "description": "Support toolchain for generating the book (Mermaid filter for diagrams in the PDF)",
+  "devDependencies": {
+    "mermaid-filter": "^1.4.7"
+  }
+}

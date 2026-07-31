@@ -1,0 +1,32 @@
+{
+  "name": "undocumented-laravel-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Docusaurus site for \"Laravel 13: The Unwritten API\", synced from ../chapters/",
+  "scripts": {
+    "sync": "node scripts/sync-docs.mjs",
+    "start": "npm run sync && docusaurus start",
+    "build": "npm run sync && docusaurus build",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
+  },
+  "dependencies": {
+    "@docusaurus/core": "~3.8.1",
+    "@docusaurus/preset-classic": "~3.8.1",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.1.1",
+    "prism-react-renderer": "^2.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "overrides": {
+    "webpack": "5.95.0"
+  },
+  "browserslist": {
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  },
+  "engines": {
+    "node": ">=18.0"
+  }
+}

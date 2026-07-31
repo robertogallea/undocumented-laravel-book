@@ -1,0 +1,35 @@
+name: Build PDF/EPUB artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Pandoc + TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-lang-other
+      - name: Install Mermaid filter
+        run: npm install
+      - name: Assemble book.md
+        run: bash build-book.sh
+      - name: Build PDF
+        run: bash to_pdf.sh
+      - name: Build EPUB
+        run: bash to_epub.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: book-artifacts
+          path: |
+            book.md
+            book.pdf
+            book.epub
