@@ -129,3 +129,79 @@ it('still fails on a missing or unexpected key, tolerating order only', function
     ]))->toThrow(ExpectationFailedException::class);
 });
 ```
+
+## `assertOnlyJsonValidationErrors()`
+
+**Case type**: undocumented method inside `Illuminate\Testing\TestResponse`'s validation-error
+assertion family, which is otherwise well documented - `assertJsonValidationErrors()` and
+`assertJsonValidationErrorFor()` both have their own entry in `laravel/docs`.
+`assertOnlyJsonValidationErrors($errors, $responseKey = 'errors')` sits right next to them and is
+never named there. **Alias flag**: not an alias - it delegates to `assertJsonValidationErrors()`
+internally and then adds a real check of its own: that no other, unexpected validation error is
+also present in the response.
+
+### Minimal snippet
+
+```php
+$response->assertOnlyJsonValidationErrors(['subject']);
+```
+
+### Documented way vs. discovered way
+
+`assertJsonValidationErrors()` only checks that the errors you name are present - it says
+nothing about any other key the response's error bag might contain:
+
+```php
+// Passes even if the response also has an unrelated `category_id` error...
+$response->assertJsonValidationErrors(['subject']);
+```
+
+`assertOnlyJsonValidationErrors()` runs that same check, then asserts the error bag contains
+nothing else:
+
+```php
+// Fails if any error besides `subject` is present...
+$response->assertOnlyJsonValidationErrors(['subject']);
+```
+
+A test that only reaches for the documented method can pass while silently missing a validation
+rule that fires unexpectedly alongside the one actually being tested - `assertOnlyJsonValidationErrors()`
+closes exactly that gap.
+
+### Real scenario: an exhaustive check on ticket creation, including a nested key
+
+`TicketController::store()` validates `notes.*.body` alongside `subject` and `category_id`.
+Laravel's validator reports that nested rule as a literal, dot-suffixed key -
+`'notes.0.body'` - in the JSON error bag, and `assertOnlyJsonValidationErrors()` matches it as
+plain text, the same way it matches any other key; there is no special nested-array resolution
+involved, only the fact that Laravel's validation errors are already a flat map of dotted-string
+keys.
+
+```php
+it('asserts only the specific validation errors present, including a nested notes.*.body key', function () {
+    $category = Category::factory()->create();
+
+    $response = $this->postJson('/api/tickets', [
+        'category_id' => $category->id,
+        'notes' => [
+            [],
+        ],
+    ]);
+
+    $response->assertOnlyJsonValidationErrors(['subject', 'notes.0.body']);
+});
+```
+
+And the contrast from the documented-vs-discovered comparison above, made concrete: an
+otherwise-passing test that would have missed a second, unrelated validation failure.
+
+```php
+it('fails when the response carries an additional, unexpected validation error', function () {
+    $response = $this->postJson('/api/tickets', []);
+
+    $response->assertJsonValidationErrors(['subject']);
+
+    expect(fn () => $response->assertOnlyJsonValidationErrors(['subject']))
+        ->toThrow(ExpectationFailedException::class);
+});
+```
