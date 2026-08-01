@@ -254,3 +254,128 @@ it('redirects to the show action after creating a ticket via the web form', func
     $response->assertRedirectToAction([TicketController::class, 'show'], ['ticket' => $ticket]);
 });
 ```
+
+## `AssertableJsonString`
+
+**Case type**: an entirely undocumented class (not a method inside a documented one, unlike the
+previous three entries) - `Illuminate\Testing\AssertableJsonString` never appears by exact name
+in `laravel/docs`. **Alias flag**: not an alias, and not to be confused with the similarly-named,
+genuinely documented `Illuminate\Testing\Fluent\AssertableJson` (the class behind
+`$response->assertJson(fn (AssertableJson $json) => ...)`) - the two are independent
+implementations. `AssertableJson`'s constructor is protected and cannot be instantiated directly
+from application code; the only relationship between the two is a one-way conversion
+(`AssertableJson::fromAssertableJsonString()`) that `TestResponse::assertJson()` uses internally
+when given a closure. Neither extends nor wraps the other. This is the chapter's most likely
+source of confusion, given how close the two names are.
+
+### Minimal snippet
+
+`AssertableJsonString` never needs a `TestResponse` - it wraps any JSON-shaped value directly:
+
+```php
+$json = new AssertableJsonString($rawJsonString);
+
+$json->assertFragment(['status' => 'open']);
+```
+
+### Documented way vs. discovered way
+
+Without it, asserting on a JSON string produced outside a request/response cycle means decoding
+it by hand and falling back to generic expectations:
+
+```php
+$decoded = json_decode($rawJsonString, true);
+
+expect($decoded['category'])->toBe('Billing');
+expect($decoded['tags'])->toBe(['urgent' => 2]);
+```
+
+`AssertableJsonString` replaces that with the same structured assertions `TestResponse` itself
+uses internally - `assertExact()`, `assertFragment()`, `assertMissing()`, `assertStructure()` -
+on any JSON string, array, `Jsonable`, or `JsonSerializable` value, with the same clear failure
+messages:
+
+```php
+(new AssertableJsonString($rawJsonString))->assertExact([
+    'category' => 'Billing',
+    'tags' => ['urgent' => 2],
+]);
+```
+
+### Real scenario: asserting a queued job's JSON digest with no HTTP response involved
+
+`TicketDigestExport` compiles a per-category JSON digest (open ticket count, tag frequency,
+average reply response time) and writes it to storage - nothing here ever touches a controller,
+a route, or a `TestResponse`:
+
+```php
+class TicketDigestExport implements ShouldQueue
+{
+    use Queueable;
+
+    public function __construct(public Category $category) {}
+
+    public function handle(): void
+    {
+        $tickets = $this->category->tickets()->with('tags')->get();
+
+        $tagFrequency = $tickets
+            ->flatMap(fn ($ticket) => $ticket->tags->pluck('name'))
+            ->countBy()
+            ->sortKeys()
+            ->all();
+
+        $averageResponseMinutes = Reply::whereIn('ticket_id', $tickets->pluck('id'))
+            ->whereNotNull('response_minutes')
+            ->avg('response_minutes');
+
+        $digest = [
+            'category_id' => $this->category->id,
+            'category' => $this->category->name,
+            'open_tickets' => $tickets->where('status', 'open')->count(),
+            'tags' => $tagFrequency,
+            'average_response_minutes' => $averageResponseMinutes !== null
+                ? round($averageResponseMinutes, 1)
+                : null,
+        ];
+
+        Storage::put("reports/tickets-digest-{$this->category->id}.json", json_encode($digest));
+    }
+}
+```
+
+The test runs the job directly and asserts on the stored string, with no `TestResponse` in sight:
+
+```php
+it('exports a JSON ticket digest for a category, asserted without any HTTP response', function () {
+    Storage::fake();
+
+    $category = Category::factory()->create(['name' => 'Billing']);
+    $urgent = Tag::factory()->create(['name' => 'urgent']);
+
+    $openTicket = Ticket::factory()->for($category, 'category')->create(['status' => 'open']);
+    $openTicket->tags()->attach($urgent);
+    Reply::factory()->for($openTicket)->create(['response_minutes' => 30]);
+    Reply::factory()->for($openTicket)->create(['response_minutes' => 50]);
+
+    $closedTicket = Ticket::factory()->for($category, 'category')->create(['status' => 'closed']);
+    $closedTicket->tags()->attach($urgent);
+
+    (new TicketDigestExport($category))->handle();
+
+    $json = Storage::get("reports/tickets-digest-{$category->id}.json");
+
+    (new AssertableJsonString($json))->assertExact([
+        'category_id' => $category->id,
+        'category' => 'Billing',
+        'open_tickets' => 1,
+        'tags' => ['urgent' => 2],
+        'average_response_minutes' => 40.0,
+    ]);
+});
+```
+
+The same principle extends well beyond a queued job: any JSON string produced outside a
+request/response cycle - the output of an Artisan command, or a payload broadcast over an event
+- can be asserted on the same way. The digest job above is one instance of that, not the only
+one.
