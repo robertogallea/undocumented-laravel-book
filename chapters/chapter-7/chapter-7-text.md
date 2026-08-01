@@ -205,3 +205,52 @@ it('fails when the response carries an additional, unexpected validation error',
         ->toThrow(ExpectationFailedException::class);
 });
 ```
+
+## `assertRedirectToAction()`
+
+**Case type**: undocumented method inside `Illuminate\Testing\TestResponse`'s redirect-assertion
+family, which is otherwise well documented - `assertRedirect()` and `assertRedirectToRoute()`
+both have their own entry in `laravel/docs`. `assertRedirectToAction($name, $parameters = [])`
+sits between them in the same file and is never named there. **Alias flag**: not an alias - it
+resolves the expected URL through a distinct mechanism of its own (the global `action()` helper,
+which looks up a route by its controller action), independent from both a raw URI string and a
+route name.
+
+### Minimal snippet
+
+```php
+$response->assertRedirectToAction([TicketController::class, 'show'], ['ticket' => $ticket]);
+```
+
+### Documented way vs. discovered way
+
+All three redirect assertions end up comparing against the same `Location` header, but each
+resolves the expected URL differently:
+
+| Method | Resolves the expected URL from | Needs |
+|---|---|---|
+| `assertRedirect($uri)` | the raw URI/URL passed in, used as-is | nothing to look up |
+| `assertRedirectToRoute($name, $parameters)` | a named route, via the `route()` helper | the target route must have a `->name(...)` |
+| `assertRedirectToAction($name, $parameters)` | a controller action, via the `action()` helper | the target route must be backed by that controller action - no name required |
+
+### Real scenario: redirecting to a route that was never given a name
+
+`routes/web.php`'s `GET /tickets/{ticket}` route (`TicketController::show`) has no `->name(...)`
+at all - it only exists as a controller action. `assertRedirectToRoute()` has nothing to resolve
+against a route like this one; `assertRedirectToAction()` targets it directly, by the same
+controller-action reference the production redirect itself already uses:
+
+```php
+it('redirects to the show action after creating a ticket via the web form', function () {
+    $category = Category::factory()->create();
+
+    $response = $this->post('/tickets', [
+        'subject' => 'Website checkout is broken',
+        'category_id' => $category->id,
+    ]);
+
+    $ticket = Ticket::sole();
+
+    $response->assertRedirectToAction([TicketController::class, 'show'], ['ticket' => $ticket]);
+});
+```
