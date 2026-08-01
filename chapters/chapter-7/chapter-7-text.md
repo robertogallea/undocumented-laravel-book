@@ -5,19 +5,19 @@ streaming, and faking outgoing calls. Chapter 7 stays in the same Part and turns
 side - the assertions that check what a test actually got back, and one that does not depend on
 getting anything back from an HTTP request at all. `assertJson()`, `assertJsonValidationErrors()`,
 `assertRedirect()`, and `assertRedirectToRoute()` are the documented tools every Laravel test
-suite already reaches for; this chapter walks through five siblings that sit right next to them,
+suite already reaches for; this chapter walks through four siblings that sit right next to them,
 each replacing a combination of those already-known assertions with a single, more precise one:
 an order-tolerant JSON comparison, an exact check of which validation errors came back and no
-others, a redirect assertion tied to a controller action instead of a route name, a way to assert
-a precognitive request succeeded, and a JSON assertion class that never touches a `TestResponse`
-at all. Every example is verified against `laravel/framework` v13.22.0 and the `laravel/docs`
-`13.x` branch, and is a real, green Pest test drawn from this book's companion application.
+others, a redirect assertion tied to a controller action instead of a route name, and a JSON
+assertion class that never touches a `TestResponse` at all. Every example is verified against
+`laravel/framework` v13.22.0 and the `laravel/docs` `13.x` branch, and is a real, green Pest test
+drawn from this book's companion application.
 
-The running scenario for the first four entries is a small helpdesk ticketing endpoint:
+The running scenario for the first three entries is a small helpdesk ticketing endpoint:
 `TicketController` creates a `Ticket` from a category, a set of tags, and any number of notes,
 and exposes that creation both as a JSON API endpoint and as a redirecting web form - the same
 domain chapters 4 and 5 already queried, now with an actual HTTP surface in front of it for the
-first time. The fifth entry, unlike the other four, cannot use that scenario at all: it asserts
+first time. The fourth entry, unlike the other three, cannot use that scenario at all: it asserts
 on JSON that never came from an HTTP response.
 
 ## `assertSimilarJson()`
@@ -379,3 +379,17 @@ The same principle extends well beyond a queued job: any JSON string produced ou
 request/response cycle - the output of an Artisan command, or a payload broadcast over an event
 - can be asserted on the same way. The digest job above is one instance of that, not the only
 one.
+
+## Summary
+
+| Entry | Documented alternative | When to prefer the undocumented one |
+|---|---|---|
+| `assertSimilarJson()` | `assertJson()` (subset match) / `assertExactJson()` (exact, order-sensitive) | Full content must match, but list order shouldn't |
+| `assertOnlyJsonValidationErrors()` | `assertJsonValidationErrors()` | Need to assert no other, unexpected validation error is present |
+| `assertRedirectToAction()` | `assertRedirect()` / `assertRedirectToRoute()` | The target route has no name, only a controller action |
+| `AssertableJsonString` | Manual `json_decode()` plus generic assertions | Asserting JSON produced outside a request/response cycle (a queued job, an Artisan command, a broadcast event) |
+
+None of these four replace their documented counterpart outright. `assertSimilarJson()` and
+`assertOnlyJsonValidationErrors()` are the wrong choice the moment the looser, already-known
+assertion (`assertJson()`, `assertJsonValidationErrors()`) is already precise enough for the test
+at hand - reaching for the stricter one then only adds complexity without a real gain.
