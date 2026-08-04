@@ -408,3 +408,148 @@ Worth being explicit about what this cookie is not: it only ever carries a local
 never anything resembling session or authorization state. A 400-day lifetime is a poor fit for
 data like that, which is exactly why the impersonation-adjacent cookie later in this chapter
 deliberately does not reach for `forever()`.
+
+## `Cookie::hasQueued()` / `Cookie::getQueuedCookies()` / `Cookie::unqueue()`
+
+**Case type**: a facade with a docs page covering only some of its methods - `responses.md`'s
+cookie section documents `Cookie::queue()` (accompanying a response) and `Cookie::forget()`
+(expiring one on the *next* response); it says nothing about inspecting or cancelling a cookie
+already sitting in the queue. **Alias flag**: not aliases. **Audience**: application developers.
+**Stability**: core `Cookie`/`CookieJar` component, no churn found verifying against v13.22.0.
+
+### Minimal snippet
+
+```php
+Cookie::queue('remembered_setting', 'value');
+
+Cookie::hasQueued('remembered_setting'); // true
+
+Cookie::unqueue('remembered_setting');
+
+Cookie::hasQueued('remembered_setting'); // false
+```
+
+All three read or mutate the same internal queue, never the response itself:
+
+```php
+public function hasQueued($key, $path = null)
+{
+    return ! is_null($this->queued($key, null, $path));
+}
+
+public function unqueue($name, $path = null)
+{
+    if ($path === null) {
+        unset($this->queued[$name]);
+
+        return;
+    }
+
+    unset($this->queued[$name][$path]);
+
+    if (empty($this->queued[$name])) {
+        unset($this->queued[$name]);
+    }
+}
+
+public function getQueuedCookies()
+{
+    return Arr::flatten($this->queued);
+}
+```
+
+`unqueue()` without a `$path` drops every path registered for that name; given one, it drops only
+that path's entry, leaving any other path's cookie of the same name queued.
+
+### Documented way vs. discovered way
+
+There is no documented way to ask "is this cookie already queued" or "cancel a cookie I queued
+earlier in this same request" - `queue()` adds to the queue, `forget()` schedules an already-sent
+cookie's expiry on the *next* response, and neither looks at what is currently waiting to be sent.
+Once a value has been queued, the documented API offers no way back; these three are the only way
+to inspect or reverse that decision before the response goes out.
+
+### Real scenario: cancelling an impersonation cookie for a rejected target
+
+`ImpersonationController::start()` queues a cookie optimistically, then applies a business rule
+that decides whether to keep it - an admin cannot impersonate another admin:
+
+```php
+public function start(User $user)
+{
+    abort_unless(Auth::check() && Auth::user()->is_admin, 403);
+
+    Cookie::queue('impersonation_started_at', now()->toIso8601String());
+
+    if ($user->is_admin) {
+        if (Cookie::hasQueued('impersonation_started_at')) {
+            Cookie::unqueue('impersonation_started_at');
+        }
+
+        abort(422, 'An admin cannot impersonate another admin.');
+    }
+
+    ImpersonationSession::start(Auth::user(), $user);
+
+    Route::prependMiddlewareToGroup('web', ImpersonationAuditMiddleware::class);
+
+    return back();
+}
+```
+
+Unlike the locale-preference cookie above, `impersonation_started_at` is queued with plain
+`Cookie::queue()`, not `forever()` - it is exactly the kind of session-adjacent signal that entry's
+security note warned against giving a 400-day lifetime. This route also runs under the `web`
+middleware group (unlike `OrderController::lookup()`'s `api` group in the previous entry), which
+keeps Laravel's default `EncryptCookies` and `AddQueuedCookiesToResponse` - so `Cookie::queue()`
+here needs no extra wiring, and the cookie is encrypted like any ordinary `web`-route cookie.
+
+```mermaid
+flowchart LR
+    A["Cookie::queue('impersonation_started_at', ...)"] --> B{"target is admin?"}
+    B -- yes --> C["Cookie::hasQueued() confirms it,\nCookie::unqueue() cancels it"] --> D["abort(422)\nno cookie sent"]
+    B -- no --> E["ImpersonationSession::start()"] --> F["response sent\nwith the cookie"]
+```
+
+A second mechanism reads the queue rather than mutating it. `ImpersonationAuditMiddleware` records,
+for every audited request, the names of whatever cookies happen to be queued at that moment:
+
+```php
+public function handle(Request $request, Closure $next): Response
+{
+    if (ImpersonationSession::isActive()) {
+        ImpersonationAuditLog::create([
+            'admin_id' => ImpersonationSession::adminId(),
+            'target_user_id' => ImpersonationSession::targetId(),
+            'route_name' => optional($request->route())->getName(),
+            'queued_cookie_names' => collect(Cookie::getQueuedCookies())->map->getName()->implode(','),
+        ]);
+    }
+
+    return $next($request);
+}
+```
+
+A test starts impersonation, then visits an unrelated ticket page, and finds
+`impersonation_started_at` already sitting in that later request's audit row:
+
+```php
+$this->actingAs($admin)->post("/admin/impersonate/{$target->id}")->assertRedirect();
+
+$this->get("/tickets/{$ticket->id}")->assertOk();
+
+$log = ImpersonationAuditLog::sole();
+expect($log->queued_cookie_names)->toBe('impersonation_started_at');
+```
+
+That is not a coincidence worth glossing over. `Illuminate\Cookie\Middleware\
+AddQueuedCookiesToResponse` attaches every queued cookie to the response but never calls
+`CookieJar::flushQueuedCookies()` afterward - the queue is never emptied on its own. Since
+`CookieJar` is a singleton, a cookie queued during `start()` stays queued for every later request
+in the same process until something explicitly `unqueue()`s it, which is exactly why the ticket
+request above still sees it. Left unmanaged under a long-running worker, the same cookie would
+keep re-attaching itself to every response for the rest of that worker's life.
+
+`CookieJar::queued()` - singular, the method `hasQueued()` itself delegates to - resolves one
+cookie by name and path directly rather than answering yes/no; it stays out of scope here, a
+candidate for a future edition.
