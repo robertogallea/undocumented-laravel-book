@@ -345,8 +345,12 @@ public function lookup(Request $request, PreferredLocaleContext $context)
     $context->set($order->preferred_locale);
 
     $key = "orders.status.{$order->status}";
+
     $requested = $request->string('locale')->toString();
+    $requested = in_array($requested, self::SHIPPED_LOCALES, true) ? $requested : '';
+
     $remembered = $request->cookie('preferred_locale_audit');
+    $remembered = in_array($remembered, self::SHIPPED_LOCALES, true) ? $remembered : null;
 
     $statusLabel = match (true) {
         $requested !== '' => Lang::get($key, [], $requested, false),
@@ -367,6 +371,17 @@ public function lookup(Request $request, PreferredLocaleContext $context)
     return $response;
 }
 ```
+
+Both `$requested` and `$remembered` are validated against `SHIPPED_LOCALES` - the same whitelist
+`store()` already applies to `preferred_locale` - before either reaches `Lang::get()`. This is not
+incidental. `Illuminate\Translation\FileLoader` concatenates its `$locale` argument directly into a
+filesystem path (`"{$path}/{$locale}/{$group}.php"`, loaded via `require`, and
+`"{$path}/{$locale}.json"`, decoded and merged with no group restriction at all), with no
+sanitization anywhere in `Translator`/`FileLoader`/`Filesystem` - no `basename()` or whitelist of
+any kind guards that path. `$key`'s group half is fixed server-side, but `$locale` is exactly what
+a caller supplies, whether as `?locale=` or as the cookie this entry remembers it in for 400 days.
+Checking against `SHIPPED_LOCALES` before either value reaches `Lang::get()` is what keeps that
+path closed.
 
 One detail here is not cosmetic: `Cookie::forever()` only builds a
 `Symfony\Component\HttpFoundation\Cookie` instance, it does not send it anywhere on its own. The
@@ -408,6 +423,14 @@ Worth being explicit about what this cookie is not: it only ever carries a local
 never anything resembling session or authorization state. A 400-day lifetime is a poor fit for
 data like that, which is exactly why the impersonation-adjacent cookie later in this chapter
 deliberately does not reach for `forever()`.
+
+One more attribute is worth naming precisely. Neither this cookie nor `hasQueued()`'s entry
+further on passes an explicit `$secure`/`$httpOnly`/`$sameSite` - both inherit `CookieJar`'s
+defaults, seeded in `Illuminate\Cookie\CookieServiceProvider` from `config('session.path')`/
+`domain`/`secure`/`same_site`. `config('session.http_only')` is not among them -
+`CookieServiceProvider` never reads it, so that config key is inert for this facade. `httpOnly`
+ends up `true` anyway only because that is `CookieJar::make()`/`forever()`'s own hardcoded
+parameter default, not because the config governs it.
 
 ## `Cookie::hasQueued()` / `Cookie::getQueuedCookies()` / `Cookie::unqueue()`
 
@@ -482,6 +505,11 @@ public function start(User $user)
     Cookie::queue('impersonation_started_at', now()->toIso8601String());
 
     if ($user->is_admin) {
+        // hasQueued() is unconditionally true here in this exact call path - the same key
+        // was just queued a few lines above with nothing in between able to clear it. The
+        // check is kept anyway as the defensively-correct shape for cancelling a queued
+        // cookie: it holds even if a future change made the initial queue() conditional, or
+        // if something else touched this cookie key first.
         if (Cookie::hasQueued('impersonation_started_at')) {
             Cookie::unqueue('impersonation_started_at');
         }
@@ -497,7 +525,10 @@ public function start(User $user)
 }
 ```
 
-Unlike the locale-preference cookie above, `impersonation_started_at` is queued with plain
+The `hasQueued()` check only ever matters the moment the initial `queue()` call stops being
+unconditional, or something else reaches in and touches the same key first - here, checking before
+cancelling is the defensively-correct shape regardless of whether this particular sequence needs
+it. Unlike the locale-preference cookie above, `impersonation_started_at` is queued with plain
 `Cookie::queue()`, not `forever()` - it is exactly the kind of session-adjacent signal that entry's
 security note warned against giving a 400-day lifetime. This route also runs under the `web`
 middleware group (unlike `OrderController::lookup()`'s `api` group in the previous entry), which
