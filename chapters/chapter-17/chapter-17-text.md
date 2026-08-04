@@ -161,3 +161,128 @@ expect($values)->toBe([
     'shipping.accounts.instances.dhl.driver' => null,
 ]);
 ```
+
+## `Config::prepend()` / `Config::push()`
+
+**Case type**: two undocumented methods on `Illuminate\Config\Repository` (and the `Config`
+facade), sitting beside the documented single-key `get()`/`set()` that `configuration.md`
+covers. **Alias flag**: not aliases - each does a real array mutation, not something achievable
+with `set()` alone. **Audience**: application developers; the scenario below has a
+self-registering-module shape that echoes Chapter 3's `Manager`/`MultipleInstanceManager`
+package-author pattern, worth noting, though nothing here actually shifts the target reader away
+from an application developer. **Stability**: core `Config` component, no churn found verifying
+against v13.22.0.
+
+### Minimal snippet
+
+```php
+Config::push('shipping.incident_notification_channels', 'dhl-ops@example.test');
+Config::prepend('shipping.incident_notification_channels', 'oncall-escalation@example.test');
+// ['oncall-escalation@example.test', 'ops@example.test', 'dhl-ops@example.test']
+```
+
+Neither method guards against adding a value that is already present - both simply read the
+current array, mutate a local copy, and write it back:
+
+```php
+public function prepend($key, $value)
+{
+    $array = $this->get($key, []);
+
+    array_unshift($array, $value);
+
+    $this->set($key, $array);
+}
+
+public function push($key, $value)
+{
+    $array = $this->get($key, []);
+
+    $array[] = $value;
+
+    $this->set($key, $array);
+}
+```
+
+### Documented way vs. discovered way
+
+Without either method, the same result needs a manual read, mutation, and write-back through the
+documented `get()`/`set()` pair:
+
+```php
+$channels = config('shipping.incident_notification_channels');
+array_unshift($channels, 'oncall-escalation@example.test');
+$channels[] = 'dhl-ops@example.test';
+Config::set('shipping.incident_notification_channels', $channels);
+```
+
+`prepend()`/`push()` collapse that into two calls that say directly what they do, at the cost of
+one call each instead of a single combined write.
+
+### Real scenario: a self-registering carrier module
+
+`config/shipping.php` gained a new key for this entry, deliberately a flat, ordered list rather
+than the keyed `accounts.instances` map above it - `push()`ing onto a keyed map would append at
+a numeric index and break every lookup that reads it by carrier code:
+
+```php
+'incident_notification_channels' => [
+    'ops@example.test',
+],
+```
+
+`App\Providers\CarrierNotificationServiceProvider` extends that list at boot, as a hypothetical
+carrier module would register its own incident contact alongside the app's own:
+
+```php
+class CarrierNotificationServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        if (! in_array('dhl-ops@example.test', config('shipping.incident_notification_channels'), true)) {
+            Config::push('shipping.incident_notification_channels', 'dhl-ops@example.test');
+        }
+
+        if (! in_array('oncall-escalation@example.test', config('shipping.incident_notification_channels'), true)) {
+            Config::prepend('shipping.incident_notification_channels', 'oncall-escalation@example.test');
+        }
+    }
+}
+```
+
+Both mutations are guarded by an `in_array()` check read fresh from `config()` immediately before
+each call, not cached in a local variable - `prepend()`/`push()` themselves have no notion of
+"already present," per the source above. This matters more than it looks: under a stateless
+deployment `boot()` runs once per request and the guard is merely tidy, but under a long-running
+worker such as Octane the configuration array survives across requests in the same process, so an
+unguarded version would append the same two channels again on every request that followed the
+first. A test proves the guard holds even under direct, repeated invocation:
+
+```php
+$provider = new CarrierNotificationServiceProvider($this->app);
+
+$provider->boot();
+$provider->boot();
+$provider->boot();
+
+expect(config('shipping.incident_notification_channels'))->toBe([
+    'oncall-escalation@example.test',
+    'ops@example.test',
+    'dhl-ops@example.test',
+]);
+```
+
+This is worth contrasting with `Env::writeVariable()` (Chapter 3), used elsewhere in this same
+codebase by `App\Support\ShippingProviderConfigurator`:
+
+```php
+public function rotateApiKey(string $key): void
+{
+    Env::writeVariable('SHIPPING_API_KEY', $key, $this->environmentFilePath, overwrite: true);
+}
+```
+
+`Env::writeVariable()` persists to the actual `.env` file on disk - the change survives a process
+restart. `Config::prepend()`/`Config::push()` mutate only the in-memory runtime array: the moment
+the process ends, the addition is gone, unless something re-applies it at every boot, exactly as
+`CarrierNotificationServiceProvider` does here.
