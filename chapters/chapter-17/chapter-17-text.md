@@ -553,3 +553,29 @@ keep re-attaching itself to every response for the rest of that worker's life.
 `CookieJar::queued()` - singular, the method `hasQueued()` itself delegates to - resolves one
 cookie by name and path directly rather than answering yes/no; it stays out of scope here, a
 candidate for a future edition.
+
+## Summary
+
+| Entry | Documented alternative | Prefer the undocumented one when |
+|---|---|---|
+| `Config::getMany()` | Repeated single-key `config()` calls, or `Config::get([...])` (which already delegates to it) | Reading several related keys at one call site, each with its own default |
+| `Config::prepend()` / `Config::push()` | Manual read, `array_merge()`/`array_unshift()`, and `Config::set()` | A component must extend an array-shaped config value at runtime, with its own duplicate guard |
+| `Cookie::forever()` | `Cookie::make()` with a manually computed 400-day minute count | A value should persist as close to indefinitely as browsers allow, and is not session/authorization data |
+| `Cookie::hasQueued()` / `Cookie::getQueuedCookies()` / `Cookie::unqueue()` | None - `queue()`/`forget()` only add to the queue or expire on the *next* response | A decision to send a cookie needs to be inspected or reversed before the current response leaves |
+
+None of these four documented alternatives are wrong, only narrower. `config()`'s single-key form
+is still the right tool for a single value; `Config::get([...])` already reaches `getMany()`
+internally the moment more than one key is worth naming together. A config array set once at
+deploy time never needs `prepend()`/`push()` at all - they exist for the value a component must
+extend after the fact, at boot, guarding against its own duplication. `Cookie::make()` with a
+hand-computed duration is correct right up until "as long as the browser will allow" becomes the
+actual requirement, which is what `forever()` exists to skip recomputing every time. And
+`queue()`/`forget()` cover every cookie whose fate is decided once and never reconsidered within
+the same request - the moment a later condition in that same request can change the decision, as
+it does for `ImpersonationController::start()`'s admin-target guard, only `hasQueued()`/
+`getQueuedCookies()`/`unqueue()` can act on it before the response goes out.
+
+Chapter 17 leaves Part VIII - Application Infrastructure open, not closed: Chapter 18, "Filesystem
+and reflection", follows next and closes it, moving from the configuration and cookie state an
+application carries to the files it reads and writes, and the class attributes that can drive its
+own behavior.
