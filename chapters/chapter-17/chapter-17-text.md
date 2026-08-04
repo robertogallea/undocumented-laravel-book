@@ -286,3 +286,125 @@ public function rotateApiKey(string $key): void
 restart. `Config::prepend()`/`Config::push()` mutate only the in-memory runtime array: the moment
 the process ends, the addition is gone, unless something re-applies it at every boot, exactly as
 `CarrierNotificationServiceProvider` does here.
+
+## `Cookie::forever()`
+
+**Case type**: an undocumented method on `Illuminate\Cookie\CookieJar` (and the `Cookie` facade),
+sitting beside the documented `make()` that `responses.md`'s cookie section covers.
+**Alias flag**: yes - a one-line wrapper over `make()` with a fixed duration, the same case-type
+already covered for `Cache::sear()` (Chapter 11). **Audience**: application developers.
+**Stability**: core `Cookie`/`CookieJar` component, no churn found verifying against v13.22.0.
+
+### Minimal snippet
+
+```php
+Cookie::forever('remembered_setting', 'value');
+```
+
+`CookieJar::forever()` is exactly a call to `make()` with a fixed 400-day duration baked in:
+
+```php
+public function forever($name, $value, $path = null, $domain = null, $secure = null, $httpOnly = true, $raw = false, $sameSite = null)
+{
+    return $this->make($name, $value, 576000, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
+}
+```
+
+The 576000-minute figure is not an arbitrary Laravel constant - it works out to exactly 400 days,
+which is also the maximum lifetime modern browsers (Chrome, Firefox) will honor on any cookie
+regardless of what a server requests. `forever()` is aligned with that external ceiling, not
+inventing one of its own.
+
+### Documented way vs. discovered way
+
+Without it, the same 400-day duration has to be computed by hand and passed to `make()`:
+
+```php
+Cookie::make('remembered_setting', 'value', 60 * 24 * 400);
+```
+
+`forever()` collapses that arithmetic into a name that says what it means, at the cost of a fixed
+duration - there is no parameter for "as long as possible but not quite forever."
+
+### Real scenario: remembering an explicitly audited order locale
+
+Chapter 16's `OrderController::lookup()` already treats an explicitly requested `?locale=`
+differently from an absent one: a named locale is checked against that locale alone, missing keys
+and all, while an absent one falls through the ordinary locale-resolution chain. This entry adds a
+third path: a caller who named a locale once has that choice remembered in a cookie, so a later
+request naming none can still get the strict, drift-detecting treatment instead of silently
+falling back through `Lang::determineLocalesUsing()`.
+
+```php
+public function lookup(Request $request, PreferredLocaleContext $context)
+{
+    $order = Order::query()
+        ->where('phone_number', Str::numbers($request->string('phone')->toString()))
+        ->firstOrFail();
+
+    $context->set($order->preferred_locale);
+
+    $key = "orders.status.{$order->status}";
+    $requested = $request->string('locale')->toString();
+    $remembered = $request->cookie('preferred_locale_audit');
+
+    $statusLabel = match (true) {
+        $requested !== '' => Lang::get($key, [], $requested, false),
+        $remembered !== null => Lang::get($key, [], $remembered, false),
+        default => Lang::get($key),
+    };
+
+    $response = response()->json([
+        'uuid' => $order->uuid,
+        'status' => $order->status,
+        'status_label' => $statusLabel,
+    ]);
+
+    if ($requested !== '') {
+        $response->withCookie(Cookie::forever('preferred_locale_audit', $requested));
+    }
+
+    return $response;
+}
+```
+
+One detail here is not cosmetic: `Cookie::forever()` only builds a
+`Symfony\Component\HttpFoundation\Cookie` instance, it does not send it anywhere on its own. The
+natural-looking `Cookie::queue(Cookie::forever(...))` would have compiled, run, and done nothing -
+`Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse` is the piece that actually flushes a
+queued cookie onto the response, and it is only present in the `web` middleware group by default.
+`OrderController` is routed through `routes/api.php`, served by the `api` group, which does not
+include it (nor `EncryptCookies`, the group's other cookie-related middleware) unless the
+application opts in. Attaching the cookie directly to this response with `withCookie()` sidesteps
+the queue entirely, so it works regardless of which middleware group the route happens to run
+under - and because `EncryptCookies` never touches this route either, the cookie travels and is
+read back as a plain, unencrypted string, which is also why the test below asserts on it with
+`encrypted: false`.
+
+```php
+$response = $this->getJson('/api/orders/lookup?phone='.$order->phone_number.'&locale=es')
+    ->assertOk()
+    ->assertJsonPath('status_label', 'Pendiente')
+    ->assertCookie('preferred_locale_audit', 'es', encrypted: false);
+```
+
+A separate test confirms a later request with no `?locale=` but carrying that same cookie resolves
+through the strict path rather than the ordinary fallback chain - reusing `'refunded'`, already
+known from Chapter 16's own tests to be missing from `lang/es/orders.php` but present in
+`lang/en/orders.php`:
+
+```php
+$this->withCredentials()
+    ->withUnencryptedCookie('preferred_locale_audit', 'es')
+    ->getJson('/api/orders/lookup?phone='.$order->phone_number)
+    ->assertOk()
+    ->assertJsonPath('status_label', 'orders.status.refunded');
+```
+
+If the ordinary chain had resolved this instead, the English fallback would have silently supplied
+`'Refunded'` - the literal key coming back is the proof the cookie drove the strict path.
+
+Worth being explicit about what this cookie is not: it only ever carries a locale preference,
+never anything resembling session or authorization state. A 400-day lifetime is a poor fit for
+data like that, which is exactly why the impersonation-adjacent cookie later in this chapter
+deliberately does not reach for `forever()`.
