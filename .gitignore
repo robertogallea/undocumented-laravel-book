@@ -1,6 +1,7 @@
 node_modules/
 mermaid-filter.err
 code/
+docs/
 .idea/
 site/node_modules/
 site/build/
