@@ -21,7 +21,6 @@ not part of this published repo.
 ├── chapters/
 │   └── chapter-N/chapter-N-text.md   # the book's prose (English, primary and only edition for now)
 ├── site/                       # Docusaurus site (GitHub Pages), synced from chapters/
-├── code/                       # companion Laravel application (independent git repo, not yet created)
 ├── metadata.yaml               # editorial metadata (Pandoc)
 ├── template.tex                # shared LaTeX template
 ├── build-book.sh                # concatenates chapters/chapter-N into book.md
