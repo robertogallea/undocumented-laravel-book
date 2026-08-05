@@ -59,7 +59,6 @@ npm run build    # static production build
 - [Pandoc](https://pandoc.org/) with the `xelatex` engine (a TeX Live/MacTeX distribution
   with `fontspec`/`polyglossia`)
 - Node.js (for the Mermaid filter used by `to_pdf.sh`/`to_epub.sh`, and for `site/`)
-- PHP and Composer (for the companion application in `code/`)
 
 ## License
 
