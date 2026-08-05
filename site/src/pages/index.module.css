@@ -1,0 +1,53 @@
+/**
+ * CSS module for the homepage (src/pages/index.js).
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sand-5);
+}
+
+.heroDescription {
+  max-width: 40rem;
+  margin: 1rem 0 0;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 1.5rem;
+}
+
+.heroImage {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 996px) {
+  /* Docusaurus's own mobile breakpoint: stack the image under the text instead of side by
+     side, and re-center everything like the original single-column hero. */
+  .heroBanner {
+    text-align: center;
+  }
+
+  .heroDescription {
+    margin: 1rem auto 0;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
+
+  .heroImage {
+    margin-top: 2rem;
+    max-width: 320px;
+  }
+}
+
+.section {
+  padding: 3rem 0;
+}

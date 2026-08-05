@@ -169,6 +169,12 @@ $endif$
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{calc}
+\usepackage{etoolbox}
+
+% Tutte le tabelle (quick-reference di fine capitolo, ecc.) in corpo ridotto
+% rispetto al testo (70% del corpo, 11pt di base -> 7.7pt), convenzione
+% tipografica per contenuti tabellari.
+\AtBeginEnvironment{longtable}{\fontsize{7.7pt}{9pt}\selectfont}
 
 % -------------------------------------------------
 % Immagini

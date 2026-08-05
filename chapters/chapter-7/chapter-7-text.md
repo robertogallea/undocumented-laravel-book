@@ -25,7 +25,9 @@ on JSON that never came from an HTTP response.
 **Case type**: undocumented method inside `Illuminate\Testing\TestResponse`'s JSON-assertion
 family, which is otherwise well documented - `assertJson()` and `assertExactJson()` both have
 their own entry in `laravel/docs`. `assertSimilarJson($data)` sits in the exact same file, a few
-lines below `assertExactJson()`, and is never named there. **Alias flag**: not an alias of either
+lines below `assertExactJson()`, and is never named there. 
+
+**Alias flag**: not an alias of either
 sibling - it fills the one combination neither of them covers, and its own assertion logic
 (delegating to `AssertableJsonString::assertSimilar()`, which runs `Arr::sortRecursive()` on both
 sides before comparing) is genuinely different from both.
@@ -136,7 +138,9 @@ it('still fails on a missing or unexpected key, tolerating order only', function
 assertion family, which is otherwise well documented - `assertJsonValidationErrors()` and
 `assertJsonValidationErrorFor()` both have their own entry in `laravel/docs`.
 `assertOnlyJsonValidationErrors($errors, $responseKey = 'errors')` sits right next to them and is
-never named there. **Alias flag**: not an alias - it delegates to `assertJsonValidationErrors()`
+never named there. 
+
+**Alias flag**: not an alias - it delegates to `assertJsonValidationErrors()`
 internally and then adds a real check of its own: that no other, unexpected validation error is
 also present in the response.
 
@@ -211,7 +215,9 @@ it('fails when the response carries an additional, unexpected validation error',
 **Case type**: undocumented method inside `Illuminate\Testing\TestResponse`'s redirect-assertion
 family, which is otherwise well documented - `assertRedirect()` and `assertRedirectToRoute()`
 both have their own entry in `laravel/docs`. `assertRedirectToAction($name, $parameters = [])`
-sits between them in the same file and is never named there. **Alias flag**: not an alias - it
+sits between them in the same file and is never named there. 
+
+**Alias flag**: not an alias - it
 resolves the expected URL through a distinct mechanism of its own (the global `action()` helper,
 which looks up a route by its controller action), independent from both a raw URI string and a
 route name.
@@ -259,7 +265,9 @@ it('redirects to the show action after creating a ticket via the web form', func
 
 **Case type**: an entirely undocumented class (not a method inside a documented one, unlike the
 previous three entries) - `Illuminate\Testing\AssertableJsonString` never appears by exact name
-in `laravel/docs`. **Alias flag**: not an alias, and not to be confused with the similarly-named,
+in `laravel/docs`. 
+
+**Alias flag**: not an alias, and not to be confused with the similarly-named,
 genuinely documented `Illuminate\Testing\Fluent\AssertableJson` (the class behind
 `$response->assertJson(fn (AssertableJson $json) => ...)`) - the two are independent
 implementations. `AssertableJson`'s constructor is protected and cannot be instantiated directly

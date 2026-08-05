@@ -277,6 +277,18 @@ hands it to whatever was registered through the documented `Pulse::handleExcepti
 does not toggle a "lazy mode": it queues a closure to run later, only once Pulse's own ingest
 cycle actually happens, not at the point it was called.
 
+Audience shift, for two of these four: `lazy()` and `rescue()` are not something application code
+calls to observe Pulse - they are the same building blocks Pulse's own bundled recorders call
+internally. Every recorder shipped with the package (`SlowJobs`, `Servers`,
+`SlowOutgoingRequests`, `Exceptions`, `Queues`, `SlowQueries`, `CacheInteractions`, `UserJobs`)
+calls `$this->pulse->lazy()` and/or `$this->pulse->rescue()` on itself; nothing else in the
+framework does. An application developer who only wants to react to a caught exception reaches
+for the documented `Pulse::handleExceptionsUsing()` instead, exactly as `AppendixAServiceProvider`
+does below - `rescue()` and `lazy()` matter directly only to whoever is writing a custom Pulse
+Recorder of their own, the same package/subsystem-author shift Chapter 3 gave `Manager` and
+`MultipleInstanceManager`. `ignore()` and `ignoreRoutes()` stay ordinary application-developer
+calls.
+
 `AppendixAServiceProvider` wires three of the four together:
 
 ```php
@@ -324,12 +336,14 @@ expect($result)->toBeNull()
     ->and(PulseFailureLog::$caught)->toContain('boom');
 ```
 
-Flags: audience, application developer. Alias, none of the four are aliases. `rescue()` and the
-documented `handleExceptionsUsing()` are a matched pair, one undocumented primitive and one
-documented configuration point; `ignore()` is related to, but distinct from, the documented
-`Pulse::filter()` - `filter()` drops an entry after it has already been captured, `ignore()`
-prevents capture from happening at all. Stability, no known history of breaking changes to these
-four; Pulse itself is a comparatively young package, worth a mild verify-before-production note.
+Flags: audience, application developer for `ignore()`/`ignoreRoutes()`; a package/subsystem-author
+shift for `lazy()`/`rescue()`, per the note above - confirmed against every bundled Recorder's own
+source. Alias, none of the four are aliases. `rescue()` and the documented `handleExceptionsUsing()`
+are a matched pair, one undocumented primitive and one documented configuration point; `ignore()`
+is related to, but distinct from, the documented `Pulse::filter()` - `filter()` drops an entry
+after it has already been captured, `ignore()` prevents capture from happening at all. Stability,
+no known history of breaking changes to these four; Pulse itself is a comparatively young package,
+worth a mild verify-before-production note.
 Case type, four undocumented methods inside an otherwise partially-documented `Pulse` class -
 `filter()`, `handleExceptionsUsing()`, and the dashboard's own authorization gate are documented,
 these four are not.

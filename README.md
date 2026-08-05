@@ -1,5 +1,9 @@
 # Laravel 13: The Unwritten API
 
+<p align="center">
+  <img src="assets/hero-banner.webp" alt="An unfolding layer reveals hidden code underneath, illustrating the book's theme of undocumented Laravel APIs" width="800">
+</p>
+
 An open-source book about the public, realistically usable, but undocumented parts of
 Laravel: methods and classes that exist, work, and are worth knowing, yet appear nowhere in
 the official documentation.

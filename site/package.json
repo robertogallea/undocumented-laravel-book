@@ -11,8 +11,9 @@
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "~3.8.1",
-    "@docusaurus/preset-classic": "~3.8.1",
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/faster": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.1.1",
     "prism-react-renderer": "^2.4.0",
@@ -23,8 +24,16 @@
     "webpack": "5.95.0"
   },
   "browserslist": {
-    "production": [">0.5%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "engines": {
     "node": ">=18.0"

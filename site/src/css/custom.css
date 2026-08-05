@@ -1,24 +1,139 @@
 /**
- * Placeholder theme overrides. Docusaurus's default classic theme is used as-is
- * otherwise; adjust colors/spacing here once the site has real content to design around.
+ * Theme overrides matching laravel.com/docs' visual identity: same accent red, warm neutral
+ * ("sand") gray scale, and font stack (Instrument Sans / Geist Mono), verified against the
+ * live site's own compiled CSS. Docusaurus/Infima's component structure is kept as-is (the
+ * real docs site is a custom Inertia/Vue app with different markup) - only palette,
+ * typography, and a few chrome details are matched.
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Geist+Mono:wght@400..600&display=swap');
+
 :root {
-  --ifm-color-primary: #ff2d20;
-  --ifm-color-primary-dark: #e6291d;
-  --ifm-color-primary-darker: #d9271b;
-  --ifm-color-primary-darkest: #b32016;
-  --ifm-color-primary-light: #ff4536;
-  --ifm-color-primary-lighter: #ff5142;
-  --ifm-color-primary-lightest: #ff7166;
+  /* Laravel red, exactly as used on laravel.com/docs in light mode (#f53003). */
+  --ifm-color-primary: #f53003;
+  --ifm-color-primary-dark: #dd2b03;
+  --ifm-color-primary-darker: #c42602;
+  --ifm-color-primary-darkest: #a12001;
+  --ifm-color-primary-light: #ff5730;
+  --ifm-color-primary-lighter: #ff6f4f;
+  --ifm-color-primary-lightest: #ff9573;
+
+  /* Warm neutral ("sand") scale: what laravel.com/docs actually uses for body text, borders,
+     and sidebar/TOC, in place of Infima's default cool gray. */
+  --sand-1: #fdfdfc;
+  --sand-2: #f9f9f8;
+  --sand-3: #f1f0ef;
+  --sand-4: #e9e8e6;
+  --sand-5: #e2e1de;
+  --sand-6: #dad9d6;
+  --sand-7: #cfceca;
+  --sand-8: #bcbbb5;
+  --sand-9: #8d8d86;
+  --sand-10: #82827c;
+  --sand-11: #63635e;
+  --sand-12: #21201c;
+
+  --ifm-font-family-base: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --ifm-font-family-monospace: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ifm-heading-font-weight: 600;
+
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-navbar-shadow: none;
+  --ifm-toc-border-color: var(--sand-5);
+  --ifm-table-border-color: var(--sand-5);
+  --ifm-font-color-base: var(--sand-12);
+  --ifm-heading-color: var(--sand-12);
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary: #ff6b5e;
-  --ifm-color-primary-dark: #ff4f3f;
-  --ifm-color-primary-darker: #ff4030;
-  --ifm-color-primary-darkest: #f11f0d;
-  --ifm-color-primary-light: #ff877d;
-  --ifm-color-primary-lighter: #ff968d;
-  --ifm-color-primary-lightest: #ffc1bb;
+  /* laravel.com/docs swaps in a slightly brighter red for dark mode (#f61500). */
+  --ifm-color-primary: #f61500;
+  --ifm-color-primary-dark: #dd1300;
+  --ifm-color-primary-darker: #c41200;
+  --ifm-color-primary-darkest: #a10f00;
+  --ifm-color-primary-light: #ff3f27;
+  --ifm-color-primary-lighter: #ff5940;
+  --ifm-color-primary-lightest: #ff8973;
+
+  /* Same sand scale, dark end. */
+  --sand-1: #111110;
+  --sand-2: #191918;
+  --sand-3: #222221;
+  --sand-4: #2a2a28;
+  --sand-5: #31312e;
+  --sand-6: #3b3a37;
+  --sand-7: #494844;
+  --sand-8: #62605b;
+  --sand-9: #6f6d66;
+  --sand-10: #7c7b74;
+  --sand-11: #b5b3ad;
+  --sand-12: #eeeeec;
+
+  --ifm-background-color: #171717;
+  --ifm-navbar-background-color: #171717;
+  --ifm-font-color-base: var(--sand-11);
+  --ifm-heading-color: var(--sand-12);
+}
+
+/* Navbar: plain white/near-black chrome with a hairline border, red reserved for the brand
+   title and hover/active links - laravel.com/docs keeps its header monochrome rather than a
+   solid color band. */
+.navbar {
+  border-bottom: 1px solid var(--sand-5);
+}
+
+.navbar__title {
+  color: var(--ifm-color-primary);
+  font-weight: 700;
+}
+
+/* Sidebar (left menu) and right-hand table of contents: same warm neutral text/border scale
+   and a bold, red-accented active item, like laravel.com/docs' own current-page treatment. */
+.menu__link {
+  color: var(--sand-11);
+}
+
+.menu__link:hover {
+  background-color: var(--sand-3);
+  color: var(--sand-12);
+}
+
+[data-theme='dark'] .menu__link:hover {
+  background-color: var(--sand-3);
+}
+
+.menu__link--active,
+.menu__link--active:hover {
+  color: var(--ifm-color-primary);
+  background: transparent;
+  font-weight: 600;
+  /* inset box-shadow instead of a real border: same 2px accent bar, no layout shift from the
+     extra border-box width a border would add. border-radius reset to 0 so the shadow's
+     corners are square, not rounded to match .menu__link's own default pill shape. */
+  border-radius: 0;
+  box-shadow: inset 2px 0 0 0 var(--ifm-color-primary);
+}
+
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* Code blocks: rgb(17, 17, 16), overriding the palenight theme's own inline background-color
+   (prism-react-renderer sets it inline per block, so !important is required to win). */
+.prism-code {
+  background-color: rgb(17, 17, 16) !important;
+}
+
+/* Footer: kept simple rather than laravel.com's full multi-column marketing footer, which has
+   no equivalent in Docusaurus's single-list footer; just tuned to the same warm neutral tone. */
+.footer--dark {
+  --ifm-footer-background-color: var(--sand-12);
+  --ifm-footer-color: var(--sand-9);
+  --ifm-footer-link-color: var(--sand-11);
+}
+
+/* Smaller font for tables (e.g. chapter quick-reference tables) than body text. */
+.markdown table {
+  font-size: 0.7rem;
 }

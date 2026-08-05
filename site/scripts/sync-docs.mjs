@@ -105,7 +105,6 @@ function main() {
       `id: chapter-${id}`,
       `title: "${title.replace(/"/g, '\\"')}"`,
       `sidebar_position: ${sidebarPosition}`,
-      ...(id === '0' ? ['slug: /'] : []),
       '---',
       '',
     ].join('\n');
@@ -117,6 +116,10 @@ function main() {
   if (synced === 0) {
     // Docusaurus's docs plugin needs at least one document to build. This placeholder is
     // itself generated (not hand-edited) and disappears the moment any real chapter exists.
+    // No `slug: /` here: `src/pages/index.js` already owns the site root as the hero
+    // landing page, and the docs plugin's own `routeBasePath: '/'` means a doc that also
+    // claims `/` collides with it (the hero page wins, so the doc becomes unreachable from
+    // its own sidebar link) - this placeholder gets a normal id-based slug instead.
     writeFileSync(
       join(DOCS_OUT, 'chapter-0.md'),
       [
@@ -124,7 +127,6 @@ function main() {
         'id: chapter-0',
         'title: "Laravel 13: The Unwritten API"',
         'sidebar_position: 0',
-        'slug: /',
         '---',
         '',
         '# Laravel 13: The Unwritten API',

@@ -1,0 +1,3 @@
+- Case type/Alias flag/Audience/Version note/Stability from chapters 3, 6, 7, 8 (chapter 13 has none) maybe stability should be removed
+- Check margin overflows
+- closing summary non in tutti i capitoli
