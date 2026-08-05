@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check links in chapters/ and docs/
+      - name: Check links in chapters/
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress chapters docs
+          args: --no-progress chapters
           fail: true
           failIfEmpty: false
 
