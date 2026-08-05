@@ -67,10 +67,12 @@ class SanctumTokenAuditController extends Controller
     // control layer around it.
     public function missingAbility(Request $request, PersonalAccessToken $token)
     {
-        $ability = $request->string('ability')->toString();
+        $validated = $request->validate([
+            'ability' => ['required', 'string'],
+        ]);
 
         return response()->json([
-            'missing' => $token->cant($ability),
+            'missing' => $token->cant($validated['ability']),
         ]);
     }
 }
