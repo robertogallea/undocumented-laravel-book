@@ -755,7 +755,7 @@ attribute of its own design rather than one the framework defines.
 
 ## Summary
 
-| Entry | Documented alternative | Prefer the undocumented one when |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Storage::fileExists()` / `fileMissing()` / `directoryExists()` / `directoryMissing()` | `Storage::exists()` / `missing()` | The question is specifically "is this a file" or "is this a directory", not the ambiguous "is there something at this path" |
 | `Storage::checksum()` | `Storage::get()` followed by hashing the contents locally | The file only needs verifying, not reading, especially against a remote disk |

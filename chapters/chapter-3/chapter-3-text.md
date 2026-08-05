@@ -1069,9 +1069,9 @@ A free-text field like a warehouse note will eventually contain an apostrophe or
 spacing whether or not anyone intended it to - `escapeArgument()` is what keeps that ordinary
 data from ever becoming a shell-parsing problem.
 
-## Quick reference
+## Summary
 
-| Entry | Documented alternative or manual approach | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Env::get()` / `writeVariables()` / `writeVariable()` | The `env()` helper (read-only); a hand-rolled file append (write) | Package code avoiding a global helper; safely adding or updating `.env` keys from a setup or deployment script, with correct quoting |
 | `Inspiring::quote()` / `quotes()` | Hardcoding a static list of quotes | Reusing a quote as plain data outside Artisan's console output |

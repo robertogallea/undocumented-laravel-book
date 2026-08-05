@@ -390,7 +390,7 @@ one.
 
 ## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `assertSimilarJson()` | `assertJson()` (subset match) / `assertExactJson()` (exact, order-sensitive) | Full content must match, but list order shouldn't |
 | `assertOnlyJsonValidationErrors()` | `assertJsonValidationErrors()` | Need to assert no other, unexpected validation error is present |

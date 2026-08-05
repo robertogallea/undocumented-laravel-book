@@ -650,3 +650,24 @@ This closes the chapter's validation half. Together with `Rule::array()`/`Rule::
 `ConditionalRules` completes a single story: declarative rule types for the shape of a value, and
 a declarative, reusable way to decide when a rule applies at all - both undocumented alternatives
 to writing the equivalent logic by hand, string by string or instance by instance.
+
+## Summary
+
+| Entry | Documented alternative | When to prefer it |
+|---|---|---|
+| `Gate::resource()` | `Gate::define()` once per ability, or a full Policy class registered via `Gate::policy()` | Registering a resource's standard five abilities (`viewAny`/`view`/`create`/`update`/`delete`) in one call, from any plain class, without turning it into a full Policy |
+| `Gate::raw()` | `Gate::inspect()` (and, by extension, `Gate::allows()`/`check()`/`denies()`/`authorize()`) | The ability's meaningful outcome is not itself a `Response` - a plain string or other value that `inspect()`'s truthiness check cannot tell apart from `true` |
+| `Rule::array()` / `Rule::numeric()` | The equivalent string rules (`'array'`, `'array:keys'`, `'numeric|min:0'`, ...) | `Rule::numeric()` composing more than one constraint as one fluent, autocompletable chain; `Rule::array()` is a near-trivial alias otherwise |
+| `ConditionalRules` (`Rule::when()`) | `Validator::sometimes()` on a manually built `Validator` instance | The same conditional rule must be reused from more than one call site, as one shared, reusable object rather than a closure copied into each `sometimes()` call |
+
+The documented alternative is not wrong, only narrower. `Gate::define()`/`Gate::policy()` are
+fine for a resource with only one or two abilities, or one that already deserves a full Policy
+class tied to an Eloquent model. `Gate::inspect()` covers every ability deliberately built around
+`Response::allow()`/`Response::deny()`. `Rule::array()` buys nothing over the plain string the
+moment key restriction is not in play, and `Rule::numeric()`'s advantage only grows with the
+number of constraints chained onto it. `Validator::sometimes()` is fine for a condition used from
+a single call site, with nowhere else that needs the same closure repeated.
+
+Part V - Authorization, Validation, and Asynchrony continues in Chapter 11, which turns from who
+may act and what they may submit to a different concern that appears once that data is real:
+caching an expensive value instead of recomputing it on every request.

@@ -600,7 +600,7 @@ single command that started, back in the first step of this chapter, with none o
 
 ## Summary
 
-| Entry | Documented alternative | Prefer the undocumented one when |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Prohibitable` | A hand-written `if ($this->laravel->isProduction()) { ...; return self::FAILURE; }` check | The decision must be made once, centrally, and apply no matter how or when the command is invoked |
 | `ConfirmableTrait` | `migrate`'s own documented production confirmation, or a hand-written `--force`/`confirm()` check | The gated environment or warning needs to vary per command, or `--force` handling must stay consistent without repeating it everywhere |

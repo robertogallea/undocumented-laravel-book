@@ -507,16 +507,28 @@ it('replays a predetermined sequence of identifiers across several orders', func
 });
 ```
 
-## Quick reference
+## Summary
 
-| Method | Purpose | Documented alias |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
-| `Str::pascal($value, $normalize = false)` | Convert a string to PascalCase; `$normalize` (13.x) lowercases all-caps segments first | Alias of `Str::studly()` |
-| `Str::pluralPascal($value, $count = 2)` | Pluralize the last word of an already Pascal-cased string | Alias of `Str::pluralStudly()` |
-| `Str::numbers($value)` | Remove every non-digit character from a string | None |
-| `Str::parseCallback($callback, $default = null)` | Split a `"Class@method"` reference into `[class, method]`, with a default method and anonymous-class handling | None |
-| `Str::freezeUuids(?Closure $callback = null)` | Pin `Str::uuid()` to one value; auto-resets if a closure is given | None |
-| `Str::freezeUlids(?Closure $callback = null)` | Pin `Str::ulid()` to one value; auto-resets if a closure is given | None |
-| `Str::createUuidsUsingSequence(array $sequence, $whenMissing = null)` | Make `Str::uuid()` replay a fixed sequence of values | None |
-| `Str::createUlidsUsingSequence(array $sequence, $whenMissing = null)` | Make `Str::ulid()` replay a fixed sequence of values | None |
-| `Str::createUuidsNormally()` / `Str::createUlidsNormally()` | Reset `Str::uuid()` / `Str::ulid()` to normal, non-deterministic generation | Already documented - shown here only as the freeze methods' reset counterpart |
+| `Str::pascal($value, $normalize = false)` | `Str::studly()` (alias) | Same PascalCase conversion under a more explicit name; `$normalize` (13.x) additionally lowercases all-caps segments first |
+| `Str::pluralPascal($value, $count = 2)` | `Str::pluralStudly()` (alias) | Pluralizing the last word of an already Pascal-cased string, under the more explicit name |
+| `Str::numbers($value)` | A hand-rolled `preg_replace('/[^0-9]/', '', $value)` | Stripping every non-digit character without writing the regex by hand |
+| `Str::parseCallback($callback, $default = null)` | A hand-rolled `explode('@', $callback)` | Splitting a `"Class@method"` reference safely, including a default method and anonymous-class handling |
+| `Str::freezeUuids(?Closure $callback = null)` | No documented equivalent | Pinning `Str::uuid()` to one value for a test, with automatic reset when a closure is given |
+| `Str::freezeUlids(?Closure $callback = null)` | No documented equivalent | Pinning `Str::ulid()` to one value for a test, with automatic reset when a closure is given |
+| `Str::createUuidsUsingSequence(array $sequence, $whenMissing = null)` | No documented equivalent | A test creates more than one record and each needs a distinct, predetermined UUID, consumed in order |
+| `Str::createUlidsUsingSequence(array $sequence, $whenMissing = null)` | No documented equivalent | Same, for `Str::ulid()` |
+| `Str::createUuidsNormally()` / `Str::createUlidsNormally()` | Already documented | Resetting either generator back to normal, non-deterministic generation after a frozen or sequenced test |
+
+None of these replace their documented counterpart outright. `Str::pascal()`/`Str::pluralPascal()`
+are aliases in the strictest sense - identical behavior under a different name - while
+`Str::numbers()` and `Str::parseCallback()` only save writing a small piece of logic by hand, not
+anything a regex or `explode()` call couldn't already do. The freeze and sequence methods stand
+apart: they have no manual equivalent worth the name, since reproducing their deterministic,
+auto-resetting behavior outside a test would mean re-implementing the same bookkeeping `Str`
+already does internally.
+
+Chapter 2 turns from `Str` to `Arr` and `Collection`, staying with `Illuminate\Support` but
+moving from string helpers to the methods nobody imports on the framework's two most-used
+container types.

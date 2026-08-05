@@ -332,7 +332,7 @@ checks on every request (as `ImpersonationAuditMiddleware` already does by readi
 
 ## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `currentRouteNamed()` | `$request->route()->named(...)` | No `Request` instance in scope (a view composer, a policy, a queued listener) |
 | `currentRouteUses()` | `Route::currentRouteAction()` compared by hand | A direct boolean check reads more clearly than a manual string comparison |

@@ -714,7 +714,7 @@ all.
 
 ## Summary
 
-| Entry | Documented alternative | Prefer the undocumented one when |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Event::until()` | `Event::dispatch()` | Only the first non-null response matters, and every listener after it should not even run |
 | `Event::push()` / `Event::flush()` | `Event::defer(closure)` | The dispatch needs to happen on command, outside any single closure's scope, not automatically the moment a block of code finishes |

@@ -587,7 +587,7 @@ candidate for a future edition.
 
 ## Summary
 
-| Entry | Documented alternative | Prefer the undocumented one when |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Config::getMany()` | Repeated single-key `config()` calls, or `Config::get([...])` (which already delegates to it) | Reading several related keys at one call site, each with its own default |
 | `Config::prepend()` / `Config::push()` | Manual read, `array_merge()`/`array_unshift()`, and `Config::set()` | A component must extend an array-shaped config value at runtime, with its own duplicate guard |

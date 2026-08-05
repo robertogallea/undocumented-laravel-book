@@ -321,9 +321,9 @@ Each ticket surfaces through a different branch of the same chained query - alre
 tagged, or categorized - while the ticket that matches none of the three conditions is correctly
 left off the dashboard, with no closure and no explicit relationship name in sight.
 
-## Quick reference
+## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `whereDoesntHaveRelation()` / `orWhereDoesntHaveRelation()` | `whereDoesntHave()` / `orWhereDoesntHave()` with a closure | A single column/operator/value negation, without writing a closure for it |
 | `whereMorphDoesntHaveRelation()` / `orWhereMorphDoesntHaveRelation()` | `whereDoesntHaveMorph()` / `orWhereDoesntHaveMorph()` with a closure | The same single-condition case on a polymorphic relation |

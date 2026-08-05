@@ -432,7 +432,7 @@ across a long-running worker, since there is nothing stale left to keep in sync.
 
 ## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `currentEnvironmentIs()` / `resolveEnvironmentUsing()` | `app()->environment(...)` conditional | When a binding's "environment" needs to come from something other than the fixed, process-wide `APP_ENV` (e.g. a single deployment serving more than one logical mode at once) |
 | `bindMethod()` | Deriving the value manually inside the method itself | When the same derivation would otherwise be duplicated across every place that invokes that method through the container |

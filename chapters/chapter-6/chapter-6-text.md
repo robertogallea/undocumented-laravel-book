@@ -554,7 +554,7 @@ already configured.
 
 ## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `withNtlmAuth()` | `withBasicAuth()` / `withDigestAuth()` | Only when the service truly requires NTLM - verify Guzzle/libcurl support first |
 | `sink()` | Fetch the full body, then `Storage::put()` / `file_put_contents()` | Downloading a response too large to comfortably hold in memory twice |

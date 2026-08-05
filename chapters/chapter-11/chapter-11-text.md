@@ -396,7 +396,7 @@ expect(fn () => Cache::boolean('projects.report.requires_executive_review'))
 
 ## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Cache::sear()` | `Cache::rememberForever()` | Never functionally - it is the same call under a shorter name; use whichever name reads better in context. |
 | `Cache::missing()` | `! Cache::has($key)` | To state "this is still absent" directly, instead of a negated presence check at every call site. |

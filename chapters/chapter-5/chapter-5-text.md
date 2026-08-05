@@ -331,9 +331,9 @@ by hand every time the same shapes recur: two scopes fused instead of chained, s
 aggregate functions plus whichever one Laravel did not name, and a relation filter that eager
 loads itself.
 
-## Quick reference
+## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `mergeConstraintsFrom()` | Chaining both scopes directly on one builder | Combining builders obtained independently or at different points in the code, not chained up front |
 | `withAggregate()` | `withCount()` / `withMax()` / `withMin()` / `withSum()` / `withAvg()` / `withExists()` | An aggregate function not among the six named wrappers |

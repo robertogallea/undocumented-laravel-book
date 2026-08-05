@@ -787,7 +787,7 @@ for the same reason it was absent from the previous two entries: it would fail o
 
 ## Summary
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `allOnConnection()` / `allOnQueue()` | `Bus::chain([...])->onConnection()->onQueue()->dispatch()` | No `PendingChain` in scope at all (`SomeJob::dispatch()->chain([...])`), or the setting must apply unconditionally regardless of what a job already carries |
 | `through()` | `middleware(): array` defined on the job class | The guard reflects a decision made by the dispatching code (pairing several job classes under one shared policy), not a fixed fact about one job class |

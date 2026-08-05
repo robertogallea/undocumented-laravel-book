@@ -598,7 +598,7 @@ request that names none has its language decided by the order it is about.
 
 ## Summary
 
-| Entry | Documented alternative | Prefer the undocumented one when |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | `Mail::raw()` | A Mailable class plus `Mail::to(...)->send(...)` | The message is one throwaway line of text and a whole class, view, and test would exist only to carry it |
 | `Mail::plain()` | A Mailable whose `content()` declares a `text` view | A view already holds the copy, but nothing else about the message justifies a class of its own |

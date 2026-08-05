@@ -577,7 +577,7 @@ same undocumented method family established since the six status messages, reach
 `$this->components` - except for `askWithCompletion()`, which sits on a class already partly
 documented at one remove, through `anticipate()`'s own undocumented delegate.
 
-## Closing
+## Summary
 
 A note on how `ImportStockMovementsCommand` was built across this chapter: each entry's real
 scenario above shows the command as it stood when that entry was introduced, not a repeat of
@@ -586,7 +586,7 @@ section shows it before the interactive prompts existed, and so on. The complete
 every entry working together, is the one shown whole in the styled-prompts section above, and
 it is what ships in `code/` at this chapter's own tag.
 
-| Entry | Documented alternative | When to prefer the undocumented one |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
 | Styled status messages (`info()`/`error()`/`warn()`/`success()`/`alert()`/`line()`) | Classic `$this->info()`/`error()`/`warn()`/`alert()`/`line()` (`success()` has no classic form at all) | Console output that reads consistently with Laravel's own first-party commands, or whenever `success()`'s green badge is wanted |
 | `task()` | A manual `if`/`else` block printing its own outcome | An action with one clear success/failure outcome, when automatic timing and a DONE/FAIL indicator are wanted |

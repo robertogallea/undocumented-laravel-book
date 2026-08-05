@@ -620,17 +620,17 @@ The check and the conversion are deliberately two different methods: `arrayable(
 "can this become an array", `from()` is the one that actually does it - one rejects unusable
 input before the other has to.
 
-## Quick reference
+## Summary
 
-| Method | Purpose | Documented alias |
+| Entry | Documented alternative | When to prefer it |
 |---|---|---|
-| `Collection::getOrPut($key, $value)` | Get a value by key, or store and return a default if the key is missing. | None |
-| `Collection::unshift(...$values)` | Prepend one or more items to the beginning of the collection, in order. | None |
-| `Collection::diffUsing($items, callable $callback)` | Diff collection values against another set using a custom comparator. | None |
-| `Collection::diffKeysUsing($items, callable $callback)` | Diff collection keys against another set using a custom comparator. | None |
-| `Collection::mapToDictionary(callable $callback)` | Group items into plain-array buckets via a callback returning one key/value pair. | None |
-| `Collection::toBase()` | Downgrade a derived collection (e.g. Eloquent) to a plain base `Collection`. | None |
-| `Arr::arrayable($value)` | Check whether a value can be represented as an array. | None |
+| `Collection::getOrPut($key, $value)` | A manual `has()`/`get()` check followed by `put()` | Reading a key that may not exist yet, storing a default in the same call if it's missing |
+| `Collection::unshift(...$values)` | `prepend()` called once per value | Prepending more than one item at once, in order, without a loop |
+| `Collection::diffUsing($items, callable $callback)` | `diff()`'s default loose comparison | The values need a custom equality rule `diff()`'s default comparison cannot express |
+| `Collection::diffKeysUsing($items, callable $callback)` | `diffKeys()`'s default loose comparison | Same, but comparing keys instead of values |
+| `Collection::mapToDictionary(callable $callback)` | `groupBy()` plus a second `map()` pass | Building plain-array buckets directly from a single callback returning one key/value pair |
+| `Collection::toBase()` | Re-wrapping manually via `collect($derived->all())` | Downgrading a derived collection (e.g. Eloquent) back to a plain base `Collection` in one call |
+| `Arr::arrayable($value)` | A manual `is_array($value) || $value instanceof Arrayable || ...` check | Checking whether a value can become an array before calling `Arr::from()` on it |
 
 Chapter 3 turns to standalone support classes usable directly - `Env`, `Inspiring`, `Pipeline`,
 `Manager`, `MultipleInstanceManager`, and `ProcessUtils` - rather than further extensions of
