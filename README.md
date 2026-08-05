@@ -9,22 +9,15 @@ Laravel: methods and classes that exist, work, and are worth knowing, yet appear
 the official documentation.
 
 See `CLAUDE.md` for the full operating guide (structure, writing conventions, per-chapter
-workflow, progress status). See `docs/book-index.md` for the book's audience, format, and
-selection criteria, and `docs/chapters-overview.md` for a per-chapter summary.
+workflow, progress status). The book's planning/spec layer (audience, format, selection
+criteria, per-chapter outlines and writing prompts) is kept locally by the maintainer and is
+not part of this published repo.
 
 ## Structure
 
 ```
 .
 ├── CLAUDE.md                  # operating guide for writing this book
-├── docs/
-│   ├── chapters-overview.md   # per-chapter summary (short description/outline/examples)
-│   ├── book-index.md          # audience, format, selection criteria, versioning rules
-│   ├── kdp-snapshots.md        # log of KDP snapshot releases
-│   └── chapters/
-│       └── chapter-N/
-│           ├── chapter-N.md       # writing spec for chapter N
-│           └── prompts/step-*.md  # one prompt per writing phase
 ├── chapters/
 │   └── chapter-N/chapter-N-text.md   # the book's prose (English, primary and only edition for now)
 ├── site/                       # Docusaurus site (GitHub Pages), synced from chapters/
@@ -40,11 +33,6 @@ Chapters are numbered `chapter-0` (motivation and methodology) through `chapter-
 numbered chapter), grouped into 8 named Parts, followed by `chapter-19` (the closing
 Conclusions chapter) and the appendices `chapter-A`, `chapter-B`. See `CLAUDE.md` section 1
 for the full Part/chapter map.
-
-An Italian edition is planned but deliberately out of scope for now (see `CLAUDE.md` section
-9): it will be added later as `chapters-it/`, `build-book-it.sh`, and `metadata-it.yaml`,
-without touching the English structure above, the same way this scaffold itself was born as
-English-only from day one.
 
 ## How to build the book
 
@@ -76,12 +64,6 @@ npm run build    # static production build
 
 ## License
 
-The book's text (`chapters/`, `docs/`) is licensed under CC BY-SA 4.0 (see `LICENSE`). All
+The book's text (`chapters/`) is licensed under CC BY-SA 4.0 (see `LICENSE`). All
 code, including inline snippets, is licensed under the MIT License (see `LICENSE-CODE` and
 `code/LICENSE`). See `CONTRIBUTING.md` for how to propose a new entry.
-
-## Status
-
-Scaffold project: no real content (chapters, specs, prompts, companion app examples) has
-been written yet, only `chapter-0` is fully specified as the pattern to follow for every
-other chapter. See the progress-status table in `CLAUDE.md`.
