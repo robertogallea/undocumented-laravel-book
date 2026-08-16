@@ -20,10 +20,13 @@ const config = {
 
   onBrokenLinks: 'throw',
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: 'warn',
     }
   },
+
+  themes: ['@docusaurus/theme-mermaid'],
 
   i18n: {
     defaultLocale: 'en',
@@ -93,6 +96,9 @@ const config = {
         theme: prismThemes.palenight,
         darkTheme: prismThemes.palenight,
         additionalLanguages: ['php', 'bash'],
+      },
+      mermaid: {
+        theme: {light: 'neutral', dark: 'dark'},
       },
     }),
 };
