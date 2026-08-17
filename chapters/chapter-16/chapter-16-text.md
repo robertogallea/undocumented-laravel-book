@@ -16,14 +16,14 @@ label shown when a customer looks one up.
 
 **Case type**: three undocumented methods on `Illuminate\Mail\Mailer` (and the `Mail` facade),
 sitting beside the documented Mailable-based flow (`make:mail`, a class with a `build()` method,
-`Mail::to(...)->send(new SomeMailable)`) that `mail.md` covers in full. 
+`Mail::to(...)->send(new SomeMailable)`) that `mail.md` covers in full.
 
 **Alias flag**: not
 aliases - each one skips a different part of that pipeline rather than just calling `send()`
 under a shorter name: `raw()` skips the view layer entirely, `plain()` renders a view but keeps
 only its text part, `html()` accepts HTML directly with no view render step involved at all.
 
-**Audience**: application developers, no shift toward package authors. 
+**Audience**: application developers, no shift toward package authors.
 
 **Stability**: core mail
 component, no minor-version churn found while verifying against v13.22.0.
@@ -140,15 +140,15 @@ expect($email->getTo()[0]->getAddress())->toBe('ops@example.test');
 
 **Case type**: an undocumented method on `Illuminate\Mail\Mailer` (and the `Mail`/`PendingMail`
 facade chain), sitting beside the documented `send()`, `queue()`, and `later()` that `mail.md`
-covers for a Mailable implementing `Illuminate\Contracts\Queue\ShouldQueue`. 
+covers for a Mailable implementing `Illuminate\Contracts\Queue\ShouldQueue`.
 
 **Alias flag**: not
 an alias - on a Mailable that does not implement `ShouldQueue`, `send()` already sends
 immediately, so `sendNow()` adds nothing there; its entire value is forcing an immediate send on
-a Mailable that otherwise would queue. 
+a Mailable that otherwise would queue.
 
 **Audience**: application developers, no shift toward
-queue-worker or package-author concerns. 
+queue-worker or package-author concerns.
 
 **Stability**: core mail component, no minor-version
 churn found while verifying against v13.22.0.
@@ -260,7 +260,7 @@ and is not part of this entry.
 **Alias flag**: not aliases - the config key can only ever be set once, at deploy time, the same
 for every environment reading that file; these three add a runtime, environment-conditional
 override on top of it, and reply-to/return-path have no config-time equivalent at all, not just a
-more limited one. 
+more limited one.
 
 **Audience**: application developers, no shift toward package authors.
 
@@ -363,10 +363,10 @@ revisiting `Order` from a different angle - the status label shown when a custom
 facade), alongside the documented fallback-locale mechanism it observes rather than replaces -
 `localization.md` covers publishing and organizing translation files, and how a fallback locale
 fills gaps in the requested one, but nothing about being notified when even the fallback comes up
-empty. 
+empty.
 
 **Alias flag**: not an alias - nothing else in the documented API reacts to a missing key
-at the point of lookup. 
+at the point of lookup.
 
 **Audience**: application developers, no shift toward package authors.
 
@@ -489,15 +489,15 @@ its language decided somewhere else entirely. That branch is what the next secti
 
 **Case type**: an undocumented method on `Illuminate\Translation\Translator` (and the `Lang`
 facade), beside the documented `App::setLocale()` that `localization.md` presents as the way to
-change language for a single HTTP request at runtime. 
+change language for a single HTTP request at runtime.
 
 **Alias flag**: not an alias -
 `App::setLocale()` replaces the single locale the translator treats as current, for everything
 that happens afterward in the same process; this replaces the entire ordered list of candidate
 locales, recomputed on every individual lookup, and never touches the process's own locale at
-all. 
+all.
 
-**Audience**: application developers, no shift toward package authors. 
+**Audience**: application developers, no shift toward package authors.
 
 **Stability**: core
 framework, no minor-version churn found while verifying against v13.22.0.

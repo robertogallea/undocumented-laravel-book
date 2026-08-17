@@ -16,12 +16,12 @@ green Pest test drawn from the book's companion application.
 
 **Case type**: undocumented class with no dedicated docs page. Its read side is surfaced only
 indirectly through the documented global `env()` helper; its write side has no documented
-counterpart at all. 
+counterpart at all.
 
 **Alias flag**: inverted from the usual case - the documented helper is the
 one that is a thin alias, not the undocumented method. `Support/helpers.php` defines `env()` as
 `return Env::get($key, $default);`, so every call to the documented helper is already a call to
-the undocumented class underneath it. 
+the undocumented class underneath it.
 
 **Version note**: `writeVariables()` and `writeVariable()`
 are absent from the `v12.0.0` tag but present on the current `12.x` branch and in `13.x` -
@@ -201,7 +201,7 @@ already serving requests.
 
 **Case type**: undocumented class with no dedicated docs page at all. Only the *name* of the
 Artisan command it powers, `inspire`, appears in the documentation, listed once among Tinker's
-allowed commands - the `Inspiring` class behind it is never mentioned. 
+allowed commands - the `Inspiring` class behind it is never mentioned.
 
 **Alias flag**: none -
 `quotes()` is the sole source of the 41 bundled quotes, and `quote()` is not a bare passthrough
@@ -325,7 +325,7 @@ list of steps and collecting a final result. Three methods are missing from that
 
 **Case type**: a class with a docs page that covers only some of its methods - `send()`,
 `through()`, `then()`, `thenReturn()`, and `withinTransaction()` are documented; `pipe()`,
-`via()`, and `finally()` are not. 
+`via()`, and `finally()` are not.
 
 **Alias flag**: none - `pipe()` behaves differently from
 `through()` rather than wrapping it (see below), so it is not presented as a new concept for
@@ -560,7 +560,7 @@ worth knowing exists, but you are unlikely to reach for it directly.
 **Case type**: undocumented base class. The official docs teach adding one more driver to an
 *existing* Laravel manager - `Cache::extend()`, `Session::extend()`, `Storage::extend()` - never
 building a brand-new subsystem by extending `Illuminate\Support\Manager` directly, which is
-this entry's actual subject. 
+this entry's actual subject.
 
 **Alias flag**: none. No package-stability concern - this is core
 framework code, though the audience it is written for is different from the rest of this
@@ -744,7 +744,7 @@ Same audience as `Manager` above: this entry addresses package and subsystem aut
 
 **Case type**: undocumented class, structurally parallel to `Manager` but solving a different
 problem, and never named on the docs pages that describe the config-array surface it would sit
-under (`database.md`, `mail.md`). 
+under (`database.md`, `mail.md`).
 
 **Alias flag**: none - and, worth stating precisely because
 it looks like an obvious assumption, `MultipleInstanceManager` is not literally the base class
@@ -934,7 +934,7 @@ more generally.
 Back to application-developer territory after the two package-author entries above.
 
 **Case type**: undocumented class with no dedicated docs page - a single-method utility class.
-Its own docblock says plainly: "This class was originally copied from Symfony 3." 
+Its own docblock says plainly: "This class was originally copied from Symfony 3."
 
 **Alias flag**: none. No package-stability concern - core framework code.
 

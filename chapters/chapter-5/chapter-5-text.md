@@ -18,10 +18,10 @@ a category) that Chapter 4 introduced.
 subquery for `has()`/`whereHas()` and everything that delegates to them, calls
 `$hasQuery->mergeConstraintsFrom($relation->getQuery())` internally to bring the relation's own
 constraints onto the subquery. Every relation-condition method in this book so far has been
-using `mergeConstraintsFrom()` without naming it. 
+using `mergeConstraintsFrom()` without naming it.
 
 **Alias flag**: not an alias - no documented
-method fuses the where clauses of two independently-built query builders into one. 
+method fuses the where clauses of two independently-built query builders into one.
 
 **Version
 note**: confirmed present and unchanged in `v13.22.0`; no known instability, this is core
@@ -114,7 +114,7 @@ on the docs page that covers all six of its results.
 
 **Alias flag**: not an alias itself - the relationship runs the other way, `withCount()` and the
 four other documented helpers are thin, fixed-function wrappers around this method, confirmed
-directly in the source cited above. 
+directly in the source cited above.
 
 **Version note**: confirmed present and unchanged in
 `v13.22.0`, core query-builder code, no stability concern.
@@ -238,11 +238,11 @@ documents `withWhereHas()` - "check for the existence of a relationship while si
 loading the relationship based on the same conditions" - with a full worked example.
 `withWhereRelation()` is to `whereRelation()` (documented, per Chapter 4's own correction) what
 `withWhereHas()` is to `whereHas()`: the concise column/operator/value sibling of a documented
-closure-based method, never itself named in the docs. 
+closure-based method, never itself named in the docs.
 
 **Alias flag**: not an alias - a genuine
 combination of two documented primitives (`whereRelation()` and `with()`) into one call, and the
-same combination `withWhereHas()` already makes with the closure form. 
+same combination `withWhereHas()` already makes with the closure form.
 
 **Version note**:
 confirmed unchanged in `v13.22.0`, core query-builder code.

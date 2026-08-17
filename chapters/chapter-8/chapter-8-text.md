@@ -40,7 +40,7 @@ sequenceDiagram
 `resolveConcreteFromAttributes()` calls `currentEnvironmentIs()` internally to evaluate the
 `#[Bind]` PHP attribute, which `laravel/docs`'s `container.md` does document, including its
 environment-scoped form. Neither `currentEnvironmentIs()` nor `resolveEnvironmentUsing()` is
-named anywhere on that page. 
+named anywhere on that page.
 
 **Alias flag**: not trivial, but close. Every Laravel application
 already wires a default resolver at boot (`LoadConfiguration` calls
@@ -48,10 +48,10 @@ already wires a default resolver at boot (`LoadConfiguration` calls
 returns exactly what the documented `app()->environment($env)` would. The pair only earns its
 place in this chapter through `resolveEnvironmentUsing()`'s ability to replace that default
 resolver, decoupling what "environment" means for a given resolution from the fixed,
-process-wide `APP_ENV`. 
+process-wide `APP_ENV`.
 
 **Audience**: application developers configuring their own service
-provider, not package authors. 
+provider, not package authors.
 
 **Stability**: core container code, unrelated to any third-party
 driver; no minor-version churn found while verifying against v13.22.0.
@@ -156,13 +156,13 @@ resolve `PaymentGateway::class` and assert on its concrete class, exactly as the
 
 **Case type**: undocumented method on `Illuminate\Container\Container`, with no attribute or
 higher-level feature built on top of it the way the previous entry's pair powers `#[Bind]`.
-`laravel/docs`'s `container.md` never names it. 
+`laravel/docs`'s `container.md` never names it.
 
 **Alias flag**: not trivial. Contextual binding
 (`when()->needs()->give()`), the closest documented tool, only ever applies while the container
 is constructing an object; `bindMethod()` is the only container-level mechanism that reaches into
 a method call made on an object the container did not just build, and its callback replaces the
-parameter resolution for that one call entirely. 
+parameter resolution for that one call entirely.
 
 **Audience**: application developers.
 
@@ -286,15 +286,15 @@ something to carry into production unchanged.
 
 **Case type**: undocumented method on `Illuminate\Container\Container`, with no attribute or
 higher-level feature built on it, unlike the first entry's pair. `laravel/docs`'s `container.md`
-never names it. 
+never names it.
 
 **Alias flag**: not trivial. Manually re-registering a binding
 (`bind()`/`instance()`) only changes what a *future* `make()` call returns; it does nothing for
 an object that already holds a reference to the previous instance, and `refresh()` is the only
-container-level tool that keeps such an object in sync automatically. 
+container-level tool that keeps such an object in sync automatically.
 
 **Audience**: application
-developers. 
+developers.
 
 **Stability**: core container code, no minor-version churn found while verifying
 against v13.22.0.

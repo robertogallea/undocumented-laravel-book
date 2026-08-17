@@ -35,10 +35,10 @@ sequenceDiagram
 sitting beside the documented `dispatch()`, `listen()`, and `subscribe()` on the same class.
 
 **Alias flag**: not an alias - `until()` changes what the dispatch itself returns and how far it
-travels, not just how it is called. 
+travels, not just how it is called.
 
 **Audience**: application developers, no shift toward package
-authors. 
+authors.
 
 **Stability**: core event dispatcher, no minor-version churn found while verifying
 against v13.22.0.
@@ -206,9 +206,9 @@ Nothing raises an error when that occurs; the chain just ends earlier than expec
 sitting beside the documented `Event::defer()`, which covers a related but distinct need.
 
 **Alias flag**: not an alias of `defer()` - the two hand control of cancellation to different
-places, as the comparison below shows. 
+places, as the comparison below shows.
 
-**Audience**: application developers. 
+**Audience**: application developers.
 
 **Stability**: core
 event dispatcher, no minor-version churn found while verifying against v13.22.0.
@@ -331,12 +331,12 @@ relies on for a deterministic listener order.
 
 **Case type**: an undocumented pair on `Illuminate\Events\Dispatcher` (and its `Event` facade)
 with no documented sibling at all for actually removing a bound listener - a different case from
-`push()`/`flush()`, which at least has `Event::defer()` covering a related need. 
+`push()`/`flush()`, which at least has `Event::defer()` covering a related need.
 
 **Alias flag**:
-not an alias. 
+not an alias.
 
-**Audience**: application developers. 
+**Audience**: application developers.
 
 **Stability**: core event dispatcher, no
 minor-version churn found while verifying against v13.22.0.
@@ -491,12 +491,12 @@ events this way at the same time.
 facade - but not simply its mirror image. `LogManager` never defines its own `withContext()`;
 calling it through the facade goes through `LogManager::__call()` to the default channel alone.
 `withoutContext()` is different: it is defined directly on `LogManager`, and clears context from
-every channel already resolved, not only the default one. 
+every channel already resolved, not only the default one.
 
 **Alias flag**: not an alias - it also
 supports removing only specific keys, which simply not calling `withContext()` again cannot do.
 
-**Audience**: application developers. 
+**Audience**: application developers.
 
 **Stability**: core logging, no minor-version churn found
 while verifying against v13.22.0.
@@ -596,11 +596,11 @@ observable.
 **Case type**: an undocumented method beside the documented `Log::withContext()`/
 `Log::withoutContext()` on the same `Log` facade, with one added nuance: the event it registers
 against, `Illuminate\Log\Events\MessageLogged`, is itself unmentioned anywhere in `logging.md` -
-not just the method that listens for it. 
+not just the method that listens for it.
 
-**Alias flag**: not an alias. 
+**Alias flag**: not an alias.
 
-**Audience**: application developers. 
+**Audience**: application developers.
 
 **Stability**: core logging, no minor-version churn found while verifying against
 v13.22.0.

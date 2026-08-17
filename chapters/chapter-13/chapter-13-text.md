@@ -9,13 +9,10 @@ built in Chapter 3 (`StockImportPipeline`) behind a command-line entry point, al
 HTTP endpoint that already exposes the same pipeline. Every entry in this chapter styles or
 extends that one command's output and interaction, one capability at a time.
 
-Laravel ships this components-based output system for Artisan as part of pull request #43065,
-"Introducing a fresh new look for Artisan," merged into the `9.x` branch in July 2022 alongside
-a wholesale rewrite of the framework's own first-party commands (`migrate`, `queue:work`,
-`db:seed`, and others). None of it replaces the classic `Command` methods described in the
-official documentation: it sits beside them, reached through a single property,
-`$this->components`, and it is exactly this property, not any of the classic methods, that this
-chapter is about.
+Laravel added this component-based Artisan output system in pull request #43065, merged into the
+`9.x` branch in July 2022. The change also updated Laravel's first-party commands, including
+`migrate`, `queue:work`, and `db:seed`. The component API sits alongside the documented classic
+`Command` methods. This chapter covers the `$this->components` property that exposes it.
 
 ```mermaid
 flowchart TD

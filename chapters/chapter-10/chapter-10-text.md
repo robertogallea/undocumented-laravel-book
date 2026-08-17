@@ -28,13 +28,13 @@ flowchart LR
 
 **Case type**: an undocumented method on `Illuminate\Auth\Access\Gate` (proxied by the `Gate`
 facade), sitting beside a class whose manual `Gate::define()` registration and Policy-based
-authorization are both extensively documented. 
+authorization are both extensively documented.
 
 **Alias flag**: not an alias of anything documented
-- it is a bulk-registration shortcut with no single-ability equivalent. 
- 
+- it is a bulk-registration shortcut with no single-ability equivalent.
+
 **Audience**: ordinary
-application developers wiring authorization for a resource, not package authors. 
+application developers wiring authorization for a resource, not package authors.
 
 **Stability**:
 core authorization code, no minor-version churn found while verifying against v13.22.0.
@@ -218,10 +218,10 @@ exactly the booleans `ProjectPermissions` already expressed, now reachable under
 `Gate::resource()`, sitting beside `allows()`/`check()`/`denies()`/`inspect()`, all documented.
 
 **Alias flag**: not an alias - it is the only one of the five that returns an ability callback's
-result untouched. 
+result untouched.
 
 **Audience**: ordinary application developers who need more than a boolean from
-an authorization check, not package authors. 
+an authorization check, not package authors.
 
 **Stability**: core authorization code, no
 minor-version churn found while verifying against v13.22.0.
@@ -375,7 +375,7 @@ other, never from an outright denial.
 
 **Case type**: two undocumented, object-based equivalents of documented string rules on
 `Illuminate\Validation\Rule` (both `'array'`/`'array:key1,key2'` and `'numeric'` are documented as
-plain strings). 
+plain strings).
 
 **Alias flag**: this pair is not symmetric. `Rule::array($keys = null)` is a
 close-to-trivial fluent alias: its `ArrayRule` class has no method beyond the constructor, and its
@@ -383,10 +383,10 @@ close-to-trivial fluent alias: its `ArrayRule` class has no method beyond the co
 `'array:key1,key2'` with them. `Rule::numeric()` is different: its `Numeric` class exposes real
 chain methods (`between()`, `decimal()`, `digits()`, `max()`, `min()`, `multipleOf()`, and more),
 each appending an already-documented rule fragment (`gt:`, `lte:`, `decimal:`, and so on) under one
-discoverable, type-checked entry point. 
+discoverable, type-checked entry point.
 
 **Audience**: ordinary application developers, not package
-authors. 
+authors.
 
 **Stability**: validation rule objects, no minor-version churn found while verifying
 against v13.22.0.
@@ -474,13 +474,13 @@ it('rejects a negative budget through the fluent Rule::numeric()->min(0) constra
 with its usual entry points `Rule::when()`/`Rule::unless()` - despite what an earlier working note
 for this chapter assumed, `Rule::when()` itself does not appear anywhere in `laravel/docs` `13.x`
 `validation.md` either. The conditional-validation mechanism that page actually documents is
-`Validator::sometimes()`, a different tool entirely. 
+`Validator::sometimes()`, a different tool entirely.
 
 **Alias flag**: not an alias of `sometimes()`
 - the two solve the same problem with incompatible shapes, one imperative and instance-bound, the
 other a declarative, shareable value.
 
-**Audience**: ordinary application developers. 
+**Audience**: ordinary application developers.
 
 **Stability**:
 a small, stable class, no minor-version churn found while verifying against v13.22.0.

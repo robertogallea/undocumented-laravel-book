@@ -25,11 +25,11 @@ disconnected one-off.
 
 ## `Collection::getOrPut()`
 
-**Case type**: undocumented method on the documented `Collection` class. 
+**Case type**: undocumented method on the documented `Collection` class.
 
 **Alias flag**: none -
 it has its own existence check and lazily-evaluated default, it does not wrap another public
-method. 
+method.
 
 **Version note**: introduced in Laravel 8.x (absent before that release).
 
@@ -142,12 +142,12 @@ without a separate initialization pass over the SKUs first.
 
 ## `Collection::unshift()`
 
-**Case type**: undocumented method on the documented `Collection` class. 
+**Case type**: undocumented method on the documented `Collection` class.
 
 **Alias flag**: none -
 it is a one-line wrapper over PHP's native `array_unshift()`, but it is not an alias of the
 documented `Collection::prepend()`: `prepend()` accepts only one value per call, `unshift()` is
-variadic. 
+variadic.
 
 **Version note**: introduced in Laravel 11.x (absent from the `10.x` branch).
 
@@ -238,12 +238,12 @@ chained `prepend()` calls alone could not make.
 
 ## `Collection::diffUsing()` and `Collection::diffKeysUsing()`
 
-**Case type**: undocumented methods on the documented `Collection` class. 
+**Case type**: undocumented methods on the documented `Collection` class.
 
 **Alias flag**: none
 for either - both are thin wrappers over PHP's native `array_udiff()`/`array_diff_ukey()`, but
 neither is an alias of the documented `Collection::diffAssocUsing()` sibling, which compares
-keys and values together rather than one or the other. 
+keys and values together rather than one or the other.
 
 **Version note**: both introduced in
 Laravel 5.6, alongside `diffAssocUsing()`.
@@ -356,11 +356,11 @@ totals.
 
 ## `Collection::mapToDictionary()`
 
-**Case type**: undocumented method on the documented `Collection` class. 
+**Case type**: undocumented method on the documented `Collection` class.
 
 **Alias flag**: none -
 it has its own accumulation logic; `groupBy()` is actually built on top of `mapToDictionary()`
-internally, not the other way round. 
+internally, not the other way round.
 
 **Version note**: introduced in Laravel 5.5 (landed under
 the working name `buildToDictionary`, renamed before release).
@@ -467,10 +467,10 @@ exactly what `byWarehouse()` needs - no wrapping `Collection` to strip away firs
 
 ## `Collection::toBase()`
 
-**Case type**: undocumented method on the documented `Collection` class. 
+**Case type**: undocumented method on the documented `Collection` class.
 
 **Alias flag**: none -
-it has its own logic, not a wrapper around another public method. 
+it has its own logic, not a wrapper around another public method.
 
 **Version note**: introduced
 in Laravel 5.3.
@@ -542,7 +542,7 @@ one, instead of the identity-based `unique()` masking the difference.
 
 ## `Arr::arrayable()`
 
-**Case type**: undocumented method on the documented `Arr` class. 
+**Case type**: undocumented method on the documented `Arr` class.
 
 **Alias flag**: none.
 

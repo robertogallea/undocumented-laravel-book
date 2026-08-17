@@ -149,10 +149,10 @@ it('returns an unprocessable response for an unknown webhook event', function ()
 
 ## `Str::numbers()`
 
-**Case type**: undocumented method on the documented `Str` class. 
+**Case type**: undocumented method on the documented `Str` class.
 
 **Alias flag**: none - it is
-not a wrapper around another public method. 
+not a wrapper around another public method.
 
 **Version note**: introduced in Laravel 11.x
 (absent from the `10.x` branch). It applies to any formatted identifier that needs to be
@@ -247,7 +247,7 @@ digits.
 
 ## `Str::parseCallback()`
 
-**Case type**: undocumented method on the documented `Str` class. 
+**Case type**: undocumented method on the documented `Str` class.
 
 **Alias flag**: none.
 
@@ -380,7 +380,7 @@ and `Str::createUlidsUsingSequence()` are undocumented methods on the documented
 own entry in `laravel/docs` `13.x` (`strings.md`) - they are shown here only as the reset
 counterpart to the freeze methods' callback form, not as discovered content in their own right.
 
-**Alias flag**: none of the four undocumented methods wrap another public method. 
+**Alias flag**: none of the four undocumented methods wrap another public method.
 
 **Version note**: `freezeUuids()` and `createUuidsUsingSequence()` were introduced in Laravel 9.x;
 `freezeUlids()` and `createUlidsUsingSequence()` followed in Laravel 10.x.

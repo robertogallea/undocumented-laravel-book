@@ -42,7 +42,7 @@ a queued listener) without a `Request` instance in scope, unlike `$request->rout
 `currentRouteUses()` is not an alias of anything documented, but it is also not the full-strength,
 wildcard-matching sibling its name suggests - that role belongs to the separate, still-undocumented
 `Router::uses()`, out of this chapter's scope (see `docs/chapters-overview.md`'s Appendix B
-outline). 
+outline).
 
 **Audience**: ordinary application developers guarding routes, not package authors.
 
@@ -166,16 +166,16 @@ it('allows the destroy and reassign routes when no impersonation session is acti
 
 **Case type**: two undocumented methods on `Illuminate\Routing\Router` (proxied by the `Route`
 facade), for a mechanism `laravel/docs`'s `middleware.md` otherwise documents thoroughly, just
-under different names. 
+under different names.
 
 **Alias flag**: neither is an alias, but both have documented siblings
 that solve a different half of the same problem: `prependToGroup()`/`appendToGroup()` (on the
 `Middleware` configuration object passed to `bootstrap/app.php`'s `withMiddleware()`) build a
 group's composition once, at boot; `prependMiddlewareToGroup()`/`removeMiddlewareFromGroup()`
-change it afterwards, at runtime, from anywhere the `Route` facade is reachable. 
+change it afterwards, at runtime, from anywhere the `Route` facade is reachable.
 
 **Audience**:
-ordinary application developers, not package authors. 
+ordinary application developers, not package authors.
 
 **Stability**: core routing, no
 minor-version churn found while verifying against v13.22.0.

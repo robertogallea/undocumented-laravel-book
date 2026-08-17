@@ -4,16 +4,13 @@ Verified as of laravel/framework v13.22.0 (2026-08-05). A single stamp is enough
 appendix, unlike Appendix A's per-package dates, because every candidate below was noticed at a
 different point across the whole writing process rather than verified together in one pass.
 
-This appendix is a list, not a chapter. Writing Chapters 1 through 18 and Appendix A meant
-reading through classes and methods far beyond whatever ended up in a given entry, and more than
-one genuinely undocumented, realistically usable method turned up along the way with nowhere to
-go: its own chapter already had a shape, and squeezing in one more entry would have broken it.
-Rather than let that work disappear, every one of those finds is recorded here instead, with
-enough of its own context to pick back up later. What follows is not closed and does not claim to
-be complete. It is also not a replacement for the research method Chapter 0 describes: a reader
-who wants to go looking for their own undocumented corner of Laravel should still read the source
-and the documentation branch side by side, exactly as that chapter recommends. This list only
-saves that reader a first pass, by starting from ground already covered instead of from nothing.
+This appendix is a list, not a chapter. Research for Chapters 1 through 18 and Appendix A turned
+up more usable, undocumented methods than each chapter could hold without losing its shape. The
+entries here record those finds with enough context to resume the work later.
+
+This is not a complete list or a substitute for Chapter 0's method. Anyone looking for another
+undocumented Laravel API should still compare the source with the matching documentation branch.
+The list only saves a first pass by starting from work the book has already done.
 
 Each candidate that follows is recorded in the same short shape: the class or method, what it
 does, why it was left out of the chapter that found it, and how it could still become a full

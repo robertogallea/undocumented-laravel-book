@@ -27,11 +27,11 @@ not about forbidding a command from running at all in a given environment. `Proh
 `Command::prohibit()`, and `isProhibited()` do not appear anywhere in `artisan.md`.
 
 **Alias flag**: not a trivial alias of anything documented - see the comparison below for what
-it adds over a hand-written check. 
+it adds over a hand-written check.
 
 **Audience**: ordinary application developers, not package
 authors - reaching it requires nothing beyond adding the trait to a command already living in
-the application. 
+the application.
 
 **Stability**: core framework code, no minor-version churn found while
 verifying against v13.22.0.
@@ -174,12 +174,12 @@ idea it implements is not new to this book: the official Artisan documentation a
 describes exactly this behavior for `migrate`, under "Forcing Migrations To Run In Production" -
 ask for confirmation before running in production, unless `--force` is passed. What is
 undocumented is the reusable trait itself, and that its gated environment and warning message
-are both configurable rather than hardcoded to `migrate`'s own case. 
+are both configurable rather than hardcoded to `migrate`'s own case.
 
 **Alias flag**: not a
 trivial alias - see the comparison below for what it adds over a hand-written check.
 
-**Audience**: application developers, same as `Prohibitable`. 
+**Audience**: application developers, same as `Prohibitable`.
 
 **Stability**: core framework
 code, long-lived and unchanged in shape across recent Laravel versions.
@@ -308,14 +308,14 @@ every environment, for a different kind of risk entirely.
 concrete implementation `Illuminate\Console\CacheCommandMutex`, supporting an area the official
 docs only partially cover: Artisan's "Isolatable Commands" section documents the `Isolatable`
 interface and its `--isolated` option, but never names or explains the mutex primitive
-`Isolatable` is built on internally. 
+`Isolatable` is built on internally.
 
 **Alias flag**: not an alias of `Isolatable` - it is the
 lower-level primitive `Isolatable` itself calls (`Command::commandIsolationMutex()`), usable
-directly and independently of that opt-in mechanism. 
+directly and independently of that opt-in mechanism.
 
 **Audience**: application developers, same
-as the previous two entries. 
+as the previous two entries.
 
 **Stability**: core framework code, stable.
 
@@ -469,14 +469,14 @@ mechanism that actually produces one in this chapter's own code: the official do
 registering commands through `withCommands()` in `bootstrap/app.php`, always eagerly. Nowhere do
 they mention that a command class carrying Symfony's `#[AsCommand]` attribute, registered by
 class name rather than by instance, changes how Laravel resolves it - which is exactly the
-combination this entry relies on. 
+combination this entry relies on.
 
 **Alias flag**: not an alias of anything documented.
 
 **Audience shift, stated explicitly**: this entry targets whoever assembles and registers a
 bundle of commands - a package author, or an application maintainer with a growing set of
 optional or rarely-invoked admin commands - not the everyday developer adding one command to
-`app/Console/Commands`. 
+`app/Console/Commands`.
 
 **Stability**: core framework code, stable.
 

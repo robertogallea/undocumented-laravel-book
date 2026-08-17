@@ -3,30 +3,19 @@
 Chapter 18 closed by promising a return to why this search through undocumented, usable
 Laravel code was worth doing at all. This chapter is that return.
 
-Nothing in the eighteen chapters that came before this one, Chapters 1 through 18, was about
-shipping faster. That was never the promise. This book was written for developers who already use Laravel in production, who
-already know how to build with it, and who wanted something else: a deeper working knowledge of
-the tool they use every day, not a shortcut past it. Chapter 0 opened with an analogy that still
-holds here at the end: someone who lifts the hood of the car they drive daily, not because the
-car is broken, but because they want to understand it rather than merely trust that it works.
+The preceding eighteen chapters were never about shipping faster. They are for developers who
+already use Laravel in production and want to understand the framework more deeply. Chapter 0
+asked readers to look under the hood. The point was simple: learn how the tool works before a
+warning light turns into guesswork.
 
-That kind of curiosity does not stay still. It starts with using a tool. Followed far enough, it
-moves toward understanding how the tool actually works underneath its own documentation. And
-past a certain point, understanding a tool well enough stops feeling like consumption and starts
-feeling like something closer to authorship: the ability to notice a gap, a rough edge, an
-undocumented corner worth explaining, and to do something about it rather than only notice it.
+That habit can expose a missing explanation, a rough edge, or a method that has no docs page.
+An open-source book gives readers somewhere to put that work. They can correct an example, add an
+entry, or trace the same method through a part of the framework this edition did not cover.
 
-That is also, plainly, why this book exists in the form it does: open source, not a closed
-product to be bought once and left unchanged. It was written by following that same curiosity
-past the point of just using Laravel, and it exists so a reader can do the same, not only with
-this book, but with the framework it describes.
-
-The loop opened in Chapter 0 closes here. What began as a question about how far understanding
-a familiar tool could go ends as an invitation to keep asking that same question long after this
-book stops being current.
+The method starts in Chapter 0 and remains useful after this edition is out of date.
 
 Chapter 0 also left behind a method, not just a motivation, and it is worth restating in its
-plainest form. Get the release tag actually running in production, not just the latest
+plainest form. Get the release tag running in production, not just the latest
 development branch, and read the documentation branch that matches it exactly, not whichever
 version a search happens to surface. Look past what a class merely exposes and ask whether a
 given method is realistically meant for application code, or is internal plumbing that only
@@ -49,12 +38,9 @@ verified against. The Docusaurus site carries the same content versioned per Lar
 checking whether a given chapter still matches the Laravel a reader is running is never a
 guess.
 
-None of this amounts to a small catalog, either. Close to eighty entries sit across the
-eighteen chapters before this one, each a public method or class that is realistically usable,
-absent from the official documentation by its exact name, and worth more than a passing
-mention. That count is not really the point of mentioning it. The point is what it implies:
-close to eighty is a sample pulled from one framework's core and a handful of its first-party
-packages, at one version, read by one person. It was never meant to be the full list.
+The preceding eighteen chapters cover close to eighty public, realistically usable methods and
+classes absent from the official documentation by exact name. That is still only a sample from
+one framework's core and a handful of first-party packages, at one version, read by one person.
 
 Some things were left out on purpose, not missed. The wider ecosystem of community packages,
 the ones built outside Laravel's own first-party repositories, was never in scope here. This

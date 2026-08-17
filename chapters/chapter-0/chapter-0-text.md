@@ -1,44 +1,21 @@
 # Motivation and Methodology
 
-This book is for a developer who already runs Laravel in production, who already knows how to
-route a request, migrate a table, and queue a job, and who wants something past that: a working
-knowledge of the framework itself, not just of how to use it. It will not make anyone ship
-faster. That was never the promise, and it will not become one three chapters from now. What it
-offers instead is a better mental model of a tool already used every day, one built by reading
-the framework's own source rather than only its documentation.
+This book is for developers who run Laravel in production and want to understand the framework,
+not only use it. It assumes they already know how to route a request, migrate a table, and queue
+a job. The payoff is not speed. It is a better mental model, built by reading the framework's
+source alongside its documentation.
 
-It follows that this is not a book for a few kinds of readers it might be mistaken for. It is
-not an introduction to Laravel: readers here are assumed to already know what a service provider
-does, not to be meeting one for the first time. It is not a general PHP book: language features
-get no dedicated treatment, only the parts of the framework built on top of them. And it makes no
-promise of productivity, in the sense that phrase usually carries: no shortcuts, no fewer
-keystrokes, no faster time to ship. Anyone hoping for that kind of book should look elsewhere;
-this one asks for the opposite trade, more time spent understanding in exchange for less time
-spent guessing later.
+Readers should already know what a service provider does. The book covers framework features
+built on PHP, not the language itself. It trades a little more time spent understanding for less
+time spent guessing later; it does not promise shortcuts, fewer keystrokes, or faster delivery.
 
-The image that best describes what follows is an ordinary one. Someone who drives the same car
-every day eventually opens the hood, not because the engine has failed, but because knowing what
-sits under it changes the relationship with the car itself: a strange noise stops being
-mysterious, a warning light stops being a guess. Laravel is the car most of the readers of this
-book already drive daily, confidently, without complaint. This book is the hood being opened.
+People who use the same tool every day eventually look under the hood. Not because it has failed,
+but because a strange noise or warning light means more once they know what is inside. Laravel is
+that tool here.
 
-This kind of curiosity rarely stops at the hood. Once someone understands why an engine makes
-the noise it does, the next question tends to be whether the noise could be fixed, tuned, or
-made quieter, not just explained. The same happens with a framework: understanding why it
-behaves a certain way is one step past using it, but it is not the last one. Past a certain
-point, understanding well enough starts to feel less like observation and more like standing:
-noticing a gap worth documenting, a rough edge worth smoothing, and being in a position to do
-something about either instead of only noticing it.
-
-This is also, plainly, why this book exists as an open project rather than a closed one written
-once and left alone. It was not decided separately, as a marketing choice or a licensing
-preference; it grew directly out of the same drive the book is about. A book that teaches
-readers to look under the hood of a framework they did not build has little business insisting
-its own hood stay welded shut. So this one does not: anyone who finds their own undocumented
-corner worth explaining, in a later Laravel release or in a first-party package this book has
-not yet reached, is meant to open a pull request, not just a private note.
-
-The hood, once opened, does not close again on its own.
+Curiosity can lead to a useful fix or a missing explanation. That is why the book is open source.
+If a reader finds an undocumented corner in a later Laravel release or a first-party package,
+they can turn that finding into a pull request instead of leaving it as a private note.
 
 Curiosity needs a starting point, and the wrong one wastes it. Every claim this book makes about
 Laravel rests on two things opened side by side: a release tag of `laravel/framework`, the exact
@@ -59,8 +36,8 @@ So the habit worth building here is narrow but exact: before deciding anything i
 open the tagged source and the matching docs branch at the same time, not from memory of either
 one, and not from whatever version a search engine happens to surface first.
 
-The method behind every chapter that follows this one works at two levels, and both start from
-the same habit just described: source and docs open together, matching versions.
+The method used in every later chapter works at two levels. Both begin with the same habit:
+keeping the source and documentation open together at matching versions.
 
 The first level looks inside a class the documentation already covers. Take a class like `Str`,
 `Collection`, or `Gate`, each with its own dedicated page. Open the class itself and list every
@@ -87,11 +64,10 @@ is noise to filter out before what remains gets a second look.
 Applied to `Str` specifically, the first level looks like this in practice: open the class file,
 read down its list of public methods one at a time, and hold that list next to the documentation
 page's own table of contents. Most entries match immediately, one name accounted for by one
-section. A handful will not, sitting in the class but nowhere on the page. Nothing about a match
-or a mismatch here is worth stating outright yet; the point of walking through `Str` now is only
-to show what the comparison itself looks like in practice, not to report what it happened to find.
-That reporting is what the rest of this book actually does, chapter by chapter, starting with
-`Str` itself in the very next one.
+section. A handful will not, sitting in the class but nowhere on the page. A match or mismatch
+alone does not yet merit a conclusion. The `Str` walkthrough shows how to make the comparison,
+not what it finds. The remaining chapters report those findings, starting with `Str` in the next
+chapter.
 
 None of this needs specialized tooling. Grep across a class file, a side-by-side diff of two plain
 method-name lists, the project's own changelog, and the history of its merged pull requests are
@@ -155,16 +131,10 @@ along the way:
 - Not a trivial alias of something already documented, unless the book says outright that it is
   one and explains why that is still worth knowing.
 
-The hood opened at the start of this chapter does not get closed again simply by reaching the end
-of it. It stays open for the rest of the book, and every chapter from here on is another turn of
-the same wrench, applied to a different corner of the same engine, never a new hood altogether.
+The rest of the book applies this method to different parts of Laravel.
 
-One more thing is worth saying plainly, for a reader who ends up treating this book as a shelf
-reference to dip into rather than one read start to finish: the method opens here, in this
-chapter, and it is Chapter 19, at the very end, that closes it, once every corner covered in
-between has had its own say.
+Readers using this as a reference rather than reading it straight through should keep the method
+in view. It begins here and returns in Chapter 19.
 
-What is left, then, is simple enough to state directly. Take the method just laid out, its two
-levels, its filters, and the fixed meaning now attached to a single word, and start applying it
-somewhere real. Chapter 1 is where that begins in earnest, and there is no better way to test
-whether any of this actually works than to watch it work.
+The next step is simple. Apply the two-level method, its filters, and the fixed meaning of
+"undocumented" to a real class. Chapter 1 begins with `Str`.

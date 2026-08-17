@@ -25,7 +25,7 @@ on JSON that never came from an HTTP response.
 **Case type**: undocumented method inside `Illuminate\Testing\TestResponse`'s JSON-assertion
 family, which is otherwise well documented - `assertJson()` and `assertExactJson()` both have
 their own entry in `laravel/docs`. `assertSimilarJson($data)` sits in the exact same file, a few
-lines below `assertExactJson()`, and is never named there. 
+lines below `assertExactJson()`, and is never named there.
 
 **Alias flag**: not an alias of either
 sibling - it fills the one combination neither of them covers, and its own assertion logic
@@ -138,7 +138,7 @@ it('still fails on a missing or unexpected key, tolerating order only', function
 assertion family, which is otherwise well documented - `assertJsonValidationErrors()` and
 `assertJsonValidationErrorFor()` both have their own entry in `laravel/docs`.
 `assertOnlyJsonValidationErrors($errors, $responseKey = 'errors')` sits right next to them and is
-never named there. 
+never named there.
 
 **Alias flag**: not an alias - it delegates to `assertJsonValidationErrors()`
 internally and then adds a real check of its own: that no other, unexpected validation error is
@@ -215,7 +215,7 @@ it('fails when the response carries an additional, unexpected validation error',
 **Case type**: undocumented method inside `Illuminate\Testing\TestResponse`'s redirect-assertion
 family, which is otherwise well documented - `assertRedirect()` and `assertRedirectToRoute()`
 both have their own entry in `laravel/docs`. `assertRedirectToAction($name, $parameters = [])`
-sits between them in the same file and is never named there. 
+sits between them in the same file and is never named there.
 
 **Alias flag**: not an alias - it
 resolves the expected URL through a distinct mechanism of its own (the global `action()` helper,
@@ -265,7 +265,7 @@ it('redirects to the show action after creating a ticket via the web form', func
 
 **Case type**: an entirely undocumented class (not a method inside a documented one, unlike the
 previous three entries) - `Illuminate\Testing\AssertableJsonString` never appears by exact name
-in `laravel/docs`. 
+in `laravel/docs`.
 
 **Alias flag**: not an alias, and not to be confused with the similarly-named,
 genuinely documented `Illuminate\Testing\Fluent\AssertableJson` (the class behind

@@ -30,14 +30,14 @@ siblings, which live in the exact same source file and cover the exact same grou
 QueriesRelationships`, a trait that is otherwise heavily documented - `whereHas()`,
 `orWhereHas()`, `whereDoesntHave()`, and `orWhereDoesntHave()` all have their own docs
 section, and even the closely related `whereRelation()`/`orWhereRelation()` are named there.
-`whereDoesntHaveRelation()` and `orWhereDoesntHaveRelation()` are not. 
+`whereDoesntHaveRelation()` and `orWhereDoesntHaveRelation()` are not.
 
 **Alias flag**: not a
 trivial alias. Both delegate to `whereDoesntHave()`/`orWhereDoesntHave()` with a closure built
 on the fly from a plain column, operator, and value - the same convenience-wrapper pattern
 `whereRelation()` uses for `whereHas()` - and both fall back to invoking a raw closure directly
 if one is passed instead of a column name, so nothing `whereDoesntHave()` can do is lost by
-reaching for the shorthand. 
+reaching for the shorthand.
 
 **Version note**: confirmed present and unchanged in `v13.22.0`; no
 known instability, this is core query-builder code.
@@ -140,11 +140,11 @@ what would otherwise be a `where()` next to a full `orWhereDoesntHave()` closure
 **Case type**: undocumented pair of methods inside the same `QueriesRelationships` trait, the
 polymorphic counterpart of the previous entry. Their positive siblings,
 `whereMorphRelation()`/`orWhereMorphRelation()`, are exactly the pair this chapter's opening note
-already flagged as documented; the negation pair is not. 
+already flagged as documented; the negation pair is not.
 
 **Alias flag**: not a trivial alias -
 same closure-construction convenience as every other entry in this chapter, delegating to
-`whereDoesntHaveMorph()`/`orWhereDoesntHaveMorph()`. 
+`whereDoesntHaveMorph()`/`orWhereDoesntHaveMorph()`.
 
 **Version note**: confirmed present and
 unchanged in `v13.22.0`; no known instability, core query-builder code.
@@ -236,7 +236,7 @@ not-yet-urgent ticket.
 **Case type**: undocumented pair of methods inside the same `QueriesRelationships` trait, but
 with a different shape from the rest of this chapter - their base forms, `whereAttachedTo()` and
 `whereBelongsTo()`, are themselves documented with dedicated examples; only the `or` variant of
-each is missing. 
+each is missing.
 
 **Alias flag**: not a trivial alias - `orWhereAttachedTo($related,
 $relationshipName)` is exactly `whereAttachedTo($related, $relationshipName, 'or')`, and
@@ -245,7 +245,7 @@ precisely what the documented methods do not expose to a caller. Both also auto-
 relationship name from the related model's class when the second argument is omitted -
 `Str::camel(class_basename($related))` for `whereBelongsTo()` (`Category` -> `category`),
 `Str::plural(...)` of the same for `whereAttachedTo()` (`Tag` -> `tags`) - which is why neither
-example below needs to name the relationship explicitly. 
+example below needs to name the relationship explicitly.
 
 **Version note**: confirmed present and
 unchanged in `v13.22.0`; no known instability, core query-builder code.

@@ -38,7 +38,7 @@ below is about.
 "Authentication" section, which is otherwise well documented - `withBasicAuth()`,
 `withDigestAuth()`, and `withToken()` all have their own place in `laravel/docs`.
 `withNtlmAuth($username, $password)` sits in the exact same part of the class, with the exact
-same signature shape, and is never named there. 
+same signature shape, and is never named there.
 
 **Alias flag**: not an alias - it is a genuinely
 different authentication scheme, not a rename of Basic or Digest auth.
@@ -158,7 +158,7 @@ request never reaches. That fact is verified directly against the installed
 
 **Case type**: undocumented method inside `Illuminate\Http\Client\PendingRequest`. Unlike
 `withNtlmAuth()`, there is no partially-documented section to place it next to - `laravel/docs`
-has no section at all about saving a response body directly to disk. 
+has no section at all about saving a response body directly to disk.
 
 **Alias flag**: none - it
 changes how the response body is materialized, not a rename of an existing call.
@@ -310,7 +310,7 @@ already exhausted by the first read.
 **Case type**: undocumented method inside `Illuminate\Http\Client\PendingRequest`'s "Testing"
 area, which is otherwise well documented - `Http::fake()`, `Http::fakeSequence()`, and
 `preventStrayRequests()`/`allowStrayRequests()` all have their own place in `laravel/docs`.
-`stub()` is never named there. 
+`stub()` is never named there.
 
 **Alias flag**: none - it solves a narrower problem than
 `Http::fake()`, not a rename of it.
@@ -411,7 +411,7 @@ Handling" area, which is otherwise well documented - `throw()` and its variants,
 120-character truncation of `RequestException` messages, `truncateExceptionsAt()`, and the
 global static pair `RequestException::truncateAt()`/`RequestException::dontTruncate()` all have
 their own place in `laravel/docs`. `dontTruncateExceptions()` is the one method in that same
-area never named there. 
+area never named there.
 
 **Alias flag**: none - it is a real sibling with genuinely different
 behavior from `truncateExceptionsAt()`, not a rename of it, for reasons the real scenario below

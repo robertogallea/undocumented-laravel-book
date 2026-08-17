@@ -10,3 +10,5 @@ site/.docusaurus/
 book.md
 book.pdf
 book.epub
+.agents
+.claude

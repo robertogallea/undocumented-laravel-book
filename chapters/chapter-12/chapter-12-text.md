@@ -42,15 +42,15 @@ flowchart LR
 **Case type**: two undocumented instance methods on `Illuminate\Bus\Queueable`, the trait every
 queued job already uses, doing the same job as `PendingChain::onConnection()`/`onQueue()` -
 documented, but on an entirely different class, not merely a sibling method sitting inside the
-same otherwise-documented class. 
+same otherwise-documented class.
 
 **Alias flag**: not an alias - the two reach the same end state
 through a genuinely different mechanism: job-instance state cascaded chain-wide through
 `dispatchNextJobInChain()`, versus `PendingChain`'s own chain-level properties copied onto the
-first job at `dispatch()` time. 
+first job at `dispatch()` time.
 
 **Audience**: ordinary application developers, no shift toward
-package authors. 
+package authors.
 
 **Stability**: core Bus/queue code, no minor-version churn found while verifying
 against v13.22.0.
@@ -237,15 +237,15 @@ none of which has any reason to share the `reports` connection.
 middleware, rather than an undocumented sibling sitting inside one specific documented class.
 `laravel/docs` `13.x`'s `queues.md` documents job middleware at length, starting from its "Job
 Middleware" section, entirely through a method named `middleware()` - `through(` never appears in
-that file. 
+that file.
 
 **Alias flag**: not an alias, and the working assumption going into this chapter that it
 was one does not survive reading the source. `through()` and `middleware()` are two distinct,
 additive mechanisms whose results get merged, not one delegating to the other - the rest of this
-section shows exactly how. 
+section shows exactly how.
 
 **Audience**: ordinary application developers, no shift toward package
-authors. 
+authors.
 
 **Stability**: core `Illuminate\Bus`/`Illuminate\Queue` code, no minor-version churn found
 while verifying against v13.22.0.
@@ -434,16 +434,16 @@ normally, confirming the guard blocks genuine overlap without leaving the report
 
 **Case type**: an undocumented method sitting on the very trait this chapter's own fifth entry,
 `RoutesNotifications`, is about - the two are treated as separate entries here purely for
-expository clarity, not because they are unrelated. 
+expository clarity, not because they are unrelated.
 
 **Alias flag**: not a trivial alias of
 `notify()` - it bypasses `ShouldQueue` entirely, a real behavioral difference, not a shortcut to
 the same outcome. It is, however, functionally identical to a method already documented at the
 facade level, `Notification::sendNow()`; what is missing from the docs is the instance-side
-sibling of `notify()`, not the bypass behavior itself. 
+sibling of `notify()`, not the bypass behavior itself.
 
 **Audience**: ordinary application
-developers, no shift. 
+developers, no shift.
 
 **Stability**: core `Illuminate\Notifications` code, no minor-version churn
 found while verifying against v13.22.0.
@@ -547,12 +547,12 @@ past `catch()` while `SendQueuedNotifications` never appears at all, and the tes
 ## `broadcastOn()`
 
 **Case type**: an undocumented method inside an area that is only partially documented -
-`via()` and `toBroadcast()` are, `broadcastOn()`'s role in choosing a channel is not. 
+`via()` and `toBroadcast()` are, `broadcastOn()`'s role in choosing a channel is not.
 
 **Alias flag**: not an alias of anything documented, and specifically not of the mechanism it looks like
-it replaces. 
+it replaces.
 
-**Audience**: ordinary application developers, no shift. 
+**Audience**: ordinary application developers, no shift.
 
 **Stability**: core
 `Illuminate\Notifications`/`Illuminate\Broadcasting` code, no minor-version churn found while
@@ -686,10 +686,10 @@ on `App\Models\User` or another Eloquent model - but never mentions `RoutesNotif
 even though `Notifiable` is nothing more than `use HasDatabaseNotifications, RoutesNotifications;`.
 
 **Alias flag**: not a trivial alias of `Notifiable` - it is deliberately less than `Notifiable`,
-and that is the entire point. 
+and that is the entire point.
 
 **Audience**: ordinary application developers; modeling a recipient
-that is not a user is an ordinary application concern, not a package-authoring one. 
+that is not a user is an ordinary application concern, not a package-authoring one.
 
 **Stability**:
 core `Illuminate\Notifications` code, no minor-version churn found while verifying against

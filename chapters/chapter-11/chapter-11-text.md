@@ -28,11 +28,11 @@ flowchart LR
 ## `Cache::sear()`
 
 **Case type**: an undocumented method on `Illuminate\Cache\Repository` (proxied by the `Cache`
-facade), sitting beside a class whose `rememberForever()` is extensively documented. 
+facade), sitting beside a class whose `rememberForever()` is extensively documented.
 
 **Alias flag**: confirmed at the source, not only in effect - `sear()`'s entire body is a single
 delegating call, nothing more. It is exactly the alias this chapter's own outline already flagged
-it as; nothing below should be read as a new mechanism. 
+it as; nothing below should be read as a new mechanism.
 
 **Audience**: ordinary application
 developers, no shift toward package authors.
@@ -164,15 +164,15 @@ not acceptable; this chapter's report tolerates it, so it is left as `sear()` al
 ## `Cache::missing()`
 
 **Case type**: an undocumented method on `Illuminate\Cache\Repository`, sitting beside `has()`,
-which is documented. 
+which is documented.
 
 **Alias flag**: not a trivial alias the way `sear()` was - `missing()` is a
 one-line negation of `has()`, but that negation is exactly the point: it lets a caller say "this
 has not happened yet" as a single, positively named call, instead of reading a double negative
-each time (`! $cache->has(...)`) wherever the question "is this still absent" comes up. 
+each time (`! $cache->has(...)`) wherever the question "is this still absent" comes up.
 
 **Audience**:
-ordinary application developers. 
+ordinary application developers.
 
 **Stability**: core cache code, no minor-version churn found
 while verifying against v13.22.0.
@@ -259,11 +259,11 @@ wrote.
 
 ## `string()`, `integer()`, `float()`, `boolean()`
 
-**Case type**: four undocumented methods on `Illuminate\Cache\Repository`. 
+**Case type**: four undocumented methods on `Illuminate\Cache\Repository`.
 
 **Alias flag**: not
 aliases of `get()` with a cast bolted on - each one throws rather than silently returning a
-wrong-shaped value, which a manual cast never does. 
+wrong-shaped value, which a manual cast never does.
 
 **Audience**: ordinary application developers.
 
